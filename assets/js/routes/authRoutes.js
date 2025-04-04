@@ -10,6 +10,8 @@ dotenv.config();
 
 const router = express.Router();
 
+const API_URL = process.env.API_URL || 'https://portal-x09e.onrender.com'; // Substitua pela URL do Render
+
 // Rota de Registro
 router.post('/register', async (req, res) => {
     try {

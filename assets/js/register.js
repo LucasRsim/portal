@@ -17,7 +17,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
         if (response.ok) {
             alert('Cadastro realizado com sucesso!');
             // Redirecionar para a tela de login
-            window.location.href = '../../../index.html';
+            window.location.href = '/index.html';
         } else {
             const error = await response.json();
             console.error('Erro no registro:', error);

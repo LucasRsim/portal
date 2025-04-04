@@ -4,13 +4,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import connectDB from './config/db.js';
-import User from './models/User.js';
-import authController from './controllers/authController.js';
-import authMiddleware from './middleware/authMiddleware.js';
+import connectDB from './assets/js/config/db.js';
+import User from './assets/js/models/User.js';
+import authController from './assets/js/controllers/authController.js';
+import authMiddleware from './assets/js/middleware/authMiddleware.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import authRoutes from './routes/authRoutes.js';
+import authRoutes from './assets/js/routes/authRoutes.js';
 
 // Obter o equivalente ao __dirname
 const __filename = fileURLToPath(import.meta.url);

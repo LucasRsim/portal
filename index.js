@@ -30,7 +30,19 @@ const app = express();
 
 // Middleware para tratar o corpo das requisições (req.body)
 app.use(express.json());
-app.use(cors());
+
+// Middleware para logar os métodos e URLs das requisições
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// Configure o CORS para permitir o domínio do frontend
+app.use(cors({
+  origin: 'https://lucasrsim.github.io', // Substitua pelo domínio do GitHub Pages
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 console.log('Middleware executado');
 

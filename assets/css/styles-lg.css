@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0000CD; /* Azul como cor de fundo */
+    color: #fff; /* Texto branco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: #fff; /* Fundo branco para o container */
+    padding: 35px;
+    border-radius: 8px;
+    box-shadow: 10px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+    color: #000; /* Texto preto dentro do container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os elementos horizontalmente */
+}
+
+.login-container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #0000CD; /* Azul para o título */
+}
+
+form {
+    width: 100%; /* Garante que o formulário ocupe toda a largura do container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os elementos do formulário */
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #000; /* Texto preto para os rótulos */
+    width: 100%; /* Garante alinhamento com os inputs */
+    text-align: left; /* Alinha os rótulos à esquerda */
+}
+
+form input {
+    width: 100%; /* Garante que os inputs ocupem toda a largura do formulário */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Inclui padding e borda no cálculo da largura */
+}
+
+form button {
+    width: 100%; /* Garante que o botão ocupe toda a largura do formulário */
+    padding: 10px;
+    background-color: #0000CD; /* Azul para o botão */
+    color: #fff; /* Texto branco no botão */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #0000A0; /* Azul mais escuro no hover */
+}
+
+.register-link, .login-link {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #0000CD;
+}
+
+.register-link a, .login-link a {
+    color: #0000CD;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover, .login-link a:hover {
+    text-decoration: underline;
+}

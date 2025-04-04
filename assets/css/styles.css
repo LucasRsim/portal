@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+header {
+    background-color: #0000CD;
+    color: #ffffff;
+    padding: 15px 0;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: #0000CD;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+nav ul li {
+    display: inline-block;
+    position: relative;
+    padding: 10px 20px;
+    
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #ffffff;
+    color: #0000CD;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #0000CD;
+    list-style: none;
+    padding: 0;
+    width: 200px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown:hover .submenu {
+    display: block;
+
+}
+
+.submenu li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ffffff;
+
+}
+
+.submenu li a {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: block;
+
+}
+
+.submenu li a:hover {
+    background-color: #ffffff;
+    color: #000000;
+
+}
+
+.submenu li:last-child {
+    border-bottom: none;
+
+}
+
+section {
+    padding: 20px;
+
+}
+
+h1, h2, h3 {
+    color: #0000CD;
+
+}
+
+.sub-section {
+    background-color: #f0f8ff;
+    border-left: 5px solid #0000CD;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+
+}
+
+ul {
+    padding-left: 20px;
+
+}
+
+.checklist {
+    background-color: #f0f8ff;
+    border-left: 5px solid #0000CD;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    
+}
+
+#btnLimpar {
+    background-color: #0000CD;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+#btnLimpar:hover {
+    background-color: #ffffff;
+    color: #0000CD;
+    border: 2px solid #0000CD;
+
+}
+
+.logo {
+    height: 40px; /* Ajuste conforme necessário */
+    margin-right: 25px; /* Espaço entre a logo e os itens do menu */
+
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}

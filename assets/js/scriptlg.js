@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Login realizado com sucesso!');
                 console.log('Token:', data.token); // Exemplo: Salve o token no localStorage
                 // Redirecionar para a página principal
-                window.location.href = '/pages/index.html'; // Caminho relativo a partir da raiz do projeto
+                window.location.href = './pages/index.html'; // Caminho relativo a partir da raiz do projeto
             } else {
                 const error = await response.json();
                 alert(`Erro: ${error.message}`);

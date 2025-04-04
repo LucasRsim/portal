@@ -176,15 +176,24 @@ router.post('/reset-password/:token', async (req, res) => {
 });
 
 // Exemplo de uso do fetch para login
-fetch(`${API_URL}/auth/login`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ email, password })
-})
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Erro ao fazer login:', error));
+router.post('/auth/login', (req, res) => {
+    const { email, password } = req.body; // Certifique-se de que o corpo da requisição contém essas variáveis
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+    }
+
+    // Exemplo de uso
+    fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password }) // Agora as variáveis estão definidas
+    })
+        .then(response => response.json())
+        .then(data => res.json(data))
+        .catch(error => res.status(500).json({ error: 'Erro ao fazer login' }));
+});
 
 export default router;

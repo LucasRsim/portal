@@ -20,10 +20,11 @@ document.getElementById('register-form').addEventListener('submit', async functi
             window.location.href = '../../../index.html';
         } else {
             const error = await response.json();
+            console.error('Erro no registro:', error);
             alert(`Erro: ${error.message}`);
         }
     } catch (err) {
-        console.error('Erro ao cadastrar:', err);
-        alert('Erro ao conectar ao servidor.');
+        console.error('Erro ao conectar ao servidor:', err);
+        alert('Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.');
     }
 });

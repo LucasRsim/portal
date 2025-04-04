@@ -11,6 +11,7 @@ import authMiddleware from './assets/js/middleware/authMiddleware.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authRoutes from './assets/js/routes/authRoutes.js';
+import axios from 'axios';
 
 // Obter o equivalente ao __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -24,6 +25,14 @@ dotenv.config();
 connectDB();
 
 console.log('MONGO_URI:', process.env.MONGO_URI); // Testar se a variável está sendo carregada
+
+axios.get('https://api.ipify.org?format=json')
+  .then(response => {
+    console.log('IP público do Render:', response.data.ip);
+  })
+  .catch(error => {
+    console.error('Erro ao obter o IP público:', error);
+  });
 
 // Criar o aplicativo Express
 const app = express();

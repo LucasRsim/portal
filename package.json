@@ -16,5 +16,8 @@
     "url": "https://github.com/LucasRsim/portal/issues"
   },
   "homepage": "https://github.com/LucasRsim/portal#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }

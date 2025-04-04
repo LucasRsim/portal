@@ -33,7 +33,7 @@ app.use(express.json());
 
 // Middleware para logar os métodos e URLs das requisições
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  console.log(`Requisição recebida: ${req.method} ${req.url}`);
   next();
 });
 
@@ -62,6 +62,9 @@ app.use("/auth", authRoutes);
 app.get('/', (req, res) => {
     res.send('Servidor funcionando!');
 });
+
+// URL da API
+const API_URL = 'https://portal-x09e.onrender.com'; // Substitua pela URL do Render
 
 // Iniciar o servidor na porta definida no arquivo .env
 const PORT = process.env.PORT || 5000;

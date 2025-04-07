@@ -11,13 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function checkAuthentication() {
-    const token = localStorage.getItem('token'); // Recupera o token do localStorage
-    if (!token) {
-        alert('Você precisa estar logado para acessar esta página.');
-        window.location.href = '../index.html'; // Redireciona para a página de login
-    }
-}
 
 // Chame a função em todas as páginas protegidas
 checkAuthentication();

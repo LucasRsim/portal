@@ -48,7 +48,7 @@ function checkAuthentication() {
         alert('Você precisa estar logado para acessar esta página.');
         window.location.href = '../index.html';
     } else {
-        // Opcional: Valide o token no backend para garantir que ele é válido
+        // Valide o token no backend para garantir que ele é válido
         fetch('https://portal-x09e.onrender.com/auth/validate-token', {
             method: 'POST',
             headers: {

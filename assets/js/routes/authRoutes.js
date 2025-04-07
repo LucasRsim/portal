@@ -198,6 +198,16 @@ router.post('/auth/login', (req, res) => {
         .catch(error => res.status(500).json({ error: 'Erro ao fazer login' }));
 });
 
+router.post('/auth/validate-token', authMiddleware, (req, res) => {
+    try {
+        // Se o middleware `authMiddleware` passou, o token é válido
+        res.status(200).json({ message: 'Token válido' });
+    } catch (error) {
+        console.error('Erro ao validar token:', error);
+        res.status(401).json({ message: 'Token inválido ou expirado' });
+    }
+});
+
 router.get('/protected-route', authMiddleware, (req, res) => {
     res.status(200).json({ message: 'Acesso autorizado!' });
 });

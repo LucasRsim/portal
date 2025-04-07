@@ -39,7 +39,7 @@ const app = express();
 
 // Configurar CORS
 app.use(cors({
-    origin: 'https://lucasnrsim.github.io', // Substitua pelo domínio do GitHub Pages
+    origin: ['https://lucasrsim.github.io'], // Substitua pela URL correta do seu frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

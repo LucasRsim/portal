@@ -154,3 +154,33 @@ nav {
     display: flex;
     align-items: center;
 }
+
+#comunicado-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+#comunicado-texto {
+    flex: 1;
+    max-width: 60%;
+}
+
+#comunicado-imagem {
+    flex: 1;
+    max-width: 40%;
+    text-align: center;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+#comunicado-imagem img {
+    max-width: 100%;
+    height: auto;
+    align-items: right;
+    align-self: right;
+    align-content: right;
+}

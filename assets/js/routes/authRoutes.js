@@ -198,4 +198,8 @@ router.post('/auth/login', (req, res) => {
         .catch(error => res.status(500).json({ error: 'Erro ao fazer login' }));
 });
 
+router.get('/protected-route', authMiddleware, (req, res) => {
+    res.status(200).json({ message: 'Acesso autorizado!' });
+});
+
 export default router;

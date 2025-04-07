@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function checkAuthentication() {
+/*function checkAuthentication() {
     const token = localStorage.getItem('token'); // Recupera o token do localStorage
     if (!token) {
         // Se o token não existir, redireciona para a página de login
@@ -70,7 +70,7 @@ function checkAuthentication() {
 }
 
 // Chame a função em todas as páginas protegidas
-checkAuthentication();
+checkAuthentication();*/
 
 let logoutTimer;
 

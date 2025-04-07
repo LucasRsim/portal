@@ -5,8 +5,11 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import dotenv from 'dotenv';
 import authMiddleware from '../middleware/authMiddleware.js';
+import sgMail from '@sendgrid/mail';
 
 dotenv.config();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const router = express.Router();
 
@@ -111,67 +114,66 @@ router.post('/logout', authMiddleware, (req, res) => {
 
 // Rota para solicitar redefinição de senha
 router.post('/forgot-password', async (req, res) => {
-    try {
-        const { email } = req.body;
-        console.log('Tentativa de redefinição de senha para o e-mail:', email);
+    const { email } = req.body;
 
-        // Verifique se o usuário existe
+    try {
         const user = await User.findOne({ email });
         if (!user) {
-            console.log('Usuário não encontrado:', email);
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }
 
-        console.log('Usuário encontrado:', user);
-
-        // Gere o token de redefinição de senha
-        const resetToken = crypto.randomBytes(20).toString('hex');
+        // Gerar token de redefinição de senha
+        const resetToken = crypto.randomBytes(32).toString('hex');
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
         await user.save();
 
-        console.log('Token salvo no banco de dados para o usuário:', user);
+        // Enviar e-mail com o link de redefinição
+        const resetLink = `https://portal-x09e.onrender.com/reset-password.html?token=${resetToken}`;
+        const msg = {
+            to: user.email,
+            from: process.env.EMAIL_FROM,
+            subject: 'Redefinição de Senha',
+            text: `Você solicitou a redefinição de senha. Clique no link abaixo para redefinir sua senha:\n\n${resetLink}`,
+            html: `<p>Você solicitou a redefinição de senha. Clique no link abaixo para redefinir sua senha:</p>
+                   <a href="${resetLink}">${resetLink}</a>`,
+        };
 
-        res.status(200).json({
-            message: 'Solicitação de redefinição de senha registrada. Entre em contato com o administrador do sistema.',
-        });
+        await sgMail.send(msg);
+
+        res.status(200).json({ message: 'E-mail de redefinição de senha enviado com sucesso' });
     } catch (error) {
-        console.error('Erro ao registrar solicitação de redefinição de senha:', error);
-        res.status(500).json({ message: 'Erro ao registrar solicitação de redefinição de senha', error });
+        console.error('Erro ao processar solicitação:', error);
+        res.status(500).json({ message: 'Erro ao processar solicitação' });
     }
 });
 
-// Rota para redefinir a senha (usada pelo administrador)
+// Rota para redefinir a senha
 router.post('/reset-password/:token', async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
     try {
-        const { token } = req.params;
-        const { newPassword } = req.body;
-
-        console.log('Tentativa de redefinição de senha com o token:', token);
-
-        // Verifique se o token é válido
+        // Localizar o usuário pelo token e verificar se o token ainda é válido
         const user = await User.findOne({
             resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() }, // Verifica se o token ainda é válido
+            resetPasswordExpires: { $gt: Date.now() }, // Verifica se o token ainda não expirou
         });
 
         if (!user) {
-            console.log('Token inválido ou expirado:', token);
             return res.status(400).json({ message: 'Token inválido ou expirado' });
         }
 
-        // Atualize a senha
-        user.password = await bcrypt.hash(newPassword, 10); // Hash da nova senha
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
+        // Atualizar a senha
+        user.password = await bcrypt.hash(password, 10); // Criptografa a nova senha
+        user.resetPasswordToken = undefined; // Remove o token
+        user.resetPasswordExpires = undefined; // Remove a expiração
         await user.save();
 
-        console.log('Senha redefinida com sucesso para o usuário:', user);
-
-        res.json({ message: 'Senha redefinida com sucesso!' });
+        res.status(200).json({ message: 'Senha redefinida com sucesso' });
     } catch (error) {
         console.error('Erro ao redefinir senha:', error);
-        res.status(500).json({ message: 'Erro ao redefinir senha', error });
+        res.status(500).json({ message: 'Erro ao redefinir senha' });
     }
 });
 

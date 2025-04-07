@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 // Chame a função em todas as páginas protegidas
-checkAuthentication();*/
+checkAuthentication();
 
 let logoutTimer;
 
@@ -92,3 +92,4 @@ window.onload = resetLogoutTimer;
 document.onmousemove = resetLogoutTimer;
 document.onkeypress = resetLogoutTimer;
 document.onscroll = resetLogoutTimer;
+*/

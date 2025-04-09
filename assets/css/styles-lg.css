@@ -83,3 +83,10 @@ form button:hover {
 .register-link a:hover, .login-link a:hover {
     text-decoration: underline;
 }
+
+.logo {
+    height: 50px; /* Ajuste conforme necessário */
+    margin-right: 0px; /* Espaço entre a logo e os itens do menu */
+    margin-bottom: 0px; /* Espaço entre a logo e o título */
+
+}

@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Erro ao conectar ao servidor. Por favor, tente novamente mais tarde.');
         }
     });
+
+    document.getElementById("current-year").textContent = new Date().getFullYear();
 });
 
 /*function checkAuthentication() {

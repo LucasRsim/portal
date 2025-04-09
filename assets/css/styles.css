@@ -1,3 +1,10 @@
+html, body {
+    min-height: 100%; /* Garante que o body ocupe toda a altura da janela */
+    display: flex;
+    flex-direction: column; /* Permite organizar o conteúdo em coluna */
+    margin: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
@@ -5,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
+    flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
 }
 
 header {
@@ -27,11 +34,12 @@ nav ul {
     background-color: #0000CD;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
+    position: relative; /* Garante que o dropdown seja posicionado corretamente */
+    z-index: 10; /* Coloca o menu acima de outros elementos */
 }
 
 nav ul li {
-    display: inline-block;
+    display: block;
     position: relative;
     padding: 10px 20px;
     
@@ -61,6 +69,23 @@ nav a:hover {
     width: 200px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 20; /* Garante que o submenu sobreponha o rodapé */
+    max-height: 300px; /* Limita a altura do menu */
+    overflow-y: auto; /* Adiciona barra de rolagem se necessário */
+}
+
+/* Estilo para a barra de rolagem */
+.submenu::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.submenu::-webkit-scrollbar-thumb {
+    background-color: #ffffff; /* Cor da barra */
+    border-radius: 4px;
+}
+
+.submenu::-webkit-scrollbar-thumb:hover {
+    background-color: #ffcc00; /* Cor ao passar o mouse */
 }
 
 .dropdown:hover .submenu {
@@ -184,3 +209,24 @@ nav {
     align-self: right;
     align-content: right;
 }
+
+footer.footer {
+    margin-top: auto; /* Empurra o rodapé para o final da página */
+    background-color: #0000CD; /* Azul escuro */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+footer.footer a {
+    color: #ffffff;
+    text-decoration: underline;
+    margin: 0 5px;
+}
+
+footer.footer a:hover {
+    color: #ffcc00; /* Amarelo para destaque */
+}
+

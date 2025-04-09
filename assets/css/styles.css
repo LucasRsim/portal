@@ -9,7 +9,7 @@ body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: #e1dfe7;
     background-image: url('../img/logo-branco.png'); /* Imagem de fundo */
-    background-size: 1000px; /* Faz a imagem de fundo cobrir toda a tela */
+    background-size: 920px; /* Faz a imagem de fundo cobrir toda a tela */
     background-position: center; /* Centraliza a imagem de fundo */
     background-repeat: no-repeat; /* Não repete a imagem de fundo */
     background-attachment: fixed; /* Mantém a imagem fixa ao rolar a página */
@@ -20,28 +20,31 @@ body {
     flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
 }
 
-.inicio-container {
-    background: rgba(5, 5, 143, 0);
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(6, 73, 136, 0);
-    padding: 24px;
-    max-width: 800px;
-    margin: inherit;
-  }
+.conteudo-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
 
+.texto {
+    flex: 1;
+    color: black;
+}
+  
 .portais-container {
-    background: rgb(5, 5, 143);
+    background: rgba(5, 5, 143, 0);
+    color: rgb(0, 0, 0);
     border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(6, 73, 136, 0);
-    padding: 30px;
-    max-width: 700px; /* Ajuste a largura máxima conforme necessário */
-    display: flex; /* Permite usar flexbox */
-    flex-direction: column; /* Organiza os itens em coluna */
-    align-items: ; /* Alinha o conteúdo horizontalmente */
-    justify-content: center; /* Alinha o conteúdo verticalmente */
-    margin: 10px auto; /* Centraliza o container na tela */
-  }
-
+    border: 2px solid #000000;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0)
+    
+}
 
 header {
     background-color: #0000CD;

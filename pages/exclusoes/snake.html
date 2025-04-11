@@ -51,20 +51,31 @@
             </ul>
         </nav>
     </header>
+
     <section>
-        <canvas id="snake-game" width="400" height="400" style="border:1px solid #000;"></canvas>
+        <canvas id="snake-game" width="1000" height="400" style="border:2px solid #000;"></canvas>
+        <div style="margin-top: 10px;">
+            <button id="reset-button" style="padding: 10px 20px; font-size: 16px;">Reset Game</button>
+        </div>
         <script>
             const canvas = document.getElementById("snake-game");
             const ctx = canvas.getContext("2d");
+            const resetButton = document.getElementById("reset-button");
 
             const box = 20;
-            let snake = [{ x: 9 * box, y: 10 * box }];
-            let food = {
-                x: Math.floor(Math.random() * 20) * box,
-                y: Math.floor(Math.random() * 20) * box,
-            };
-            let direction = null;
-            let score = 0;
+            let snake, food, direction, score, game;
+
+            function initializeGame() {
+                snake = [{ x: 9 * box, y: 10 * box }];
+                food = {
+                    x: Math.floor(Math.random() * 20) * box,
+                    y: Math.floor(Math.random() * 20) * box,
+                };
+                direction = null;
+                score = 0;
+                if (game) clearInterval(game);
+                game = setInterval(drawGame, 100);
+            }
 
             document.addEventListener("keydown", (event) => {
                 if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
@@ -72,6 +83,8 @@
                 else if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
                 else if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
             });
+
+            resetButton.addEventListener("click", initializeGame);
 
             function drawGame() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,7 +144,7 @@
                 ctx.fillText("Score: " + score, 10, canvas.height - 10);
             }
 
-            const game = setInterval(drawGame, 100);
+            initializeGame();
         </script>
     </section>
 </body>

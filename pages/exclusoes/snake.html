@@ -53,29 +53,70 @@
     </header>
 
     <section>
-        <canvas id="snake-game" width="1000" height="400" style="border:2px solid #000;"></canvas>
-        <div style="margin-top: 10px;">
+        <canvas id="snake-game" style="border:2px solid #000; display: block; margin: 0 auto;"></canvas>
+        <div style="margin-top: 10px; text-align: center;"></div>
             <button id="reset-button" style="padding: 10px 20px; font-size: 16px;">Reset Game</button>
+        </div>
+        <div style="margin-top: 20px; text-align: center;">
+            <h3>Ranking</h3>
+            <ol id="ranking-list" style="text-align: left; display: inline-block;"></ol>
         </div>
         <script>
             const canvas = document.getElementById("snake-game");
             const ctx = canvas.getContext("2d");
             const resetButton = document.getElementById("reset-button");
+            const rankingList = document.getElementById("ranking-list");
 
             const box = 20;
             let snake, food, direction, score, game;
+            const user = prompt("Digite seu nome de usuário:") || "Anônimo";
+            let rankings = JSON.parse(localStorage.getItem("rankings")) || [];
+
+            function resizeCanvas() {
+                canvas.width = Math.floor(window.innerWidth / box) * box;
+                canvas.height = Math.floor(window.innerHeight / box) * box;
+            }
 
             function initializeGame() {
+                resizeCanvas();
                 snake = [{ x: 9 * box, y: 10 * box }];
                 food = {
-                    x: Math.floor(Math.random() * 20) * box,
-                    y: Math.floor(Math.random() * 20) * box,
+                    x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                    y: Math.floor(Math.random() * (canvas.height / box)) * box,
                 };
                 direction = null;
                 score = 0;
                 if (game) clearInterval(game);
                 game = setInterval(drawGame, 100);
             }
+
+            function updateRanking() {
+                const existingUser = rankings.find((entry) => entry.user === user);
+                if (existingUser) {
+                    if (score > existingUser.score) {
+                        existingUser.score = score;
+                    }
+                } else {
+                    rankings.push({ user, score });
+                }
+                rankings.sort((a, b) => b.score - a.score);
+                localStorage.setItem("rankings", JSON.stringify(rankings));
+                displayRanking();
+            }
+
+            function displayRanking() {
+                rankingList.innerHTML = "";
+                rankings.forEach((entry, index) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${index + 1}. ${entry.user}: ${entry.score}`;
+                    rankingList.appendChild(listItem);
+                });
+            }
+
+            window.addEventListener("resize", () => {
+                clearInterval(game);
+                initializeGame();
+            });
 
             document.addEventListener("keydown", (event) => {
                 if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
@@ -114,8 +155,8 @@
                 if (snakeX === food.x && snakeY === food.y) {
                     score++;
                     food = {
-                        x: Math.floor(Math.random() * 20) * box,
-                        y: Math.floor(Math.random() * 20) * box,
+                        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                        y: Math.floor(Math.random() * (canvas.height / box)) * box,
                     };
                 } else {
                     snake.pop();
@@ -126,14 +167,15 @@
 
                 // Check collision with walls or itself
                 if (
-                    snakeX < 0 ||
-                    snakeY < 0 ||
-                    snakeX >= canvas.width ||
-                    snakeY >= canvas.height ||
+                    snakeX < 0 || // Left margin
+                    snakeY < 0 || // Top margin
+                    snakeX >= canvas.width || // Right margin
+                    snakeY >= canvas.height || // Bottom margin
                     snake.some((segment) => segment.x === newHead.x && segment.y === newHead.y)
                 ) {
                     clearInterval(game);
                     alert("Game Over! Your score: " + score);
+                    updateRanking();
                 }
 
                 snake.unshift(newHead);
@@ -145,6 +187,7 @@
             }
 
             initializeGame();
+            displayRanking();
         </script>
     </section>
 </body>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="shortcut icon" href="../../assets/img/favi.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/css/styles.css">
 </head>
+
 <body>
     <header>
         <nav>
@@ -53,145 +55,307 @@
     </header>
 
     <section>
-        <canvas id="snake-game" width="8000" height="400" style="border:2px solid #000;"></canvas>
-        <div style="margin-top: 10px; text-align: center;"></div>
-            <button id="reset-button" style="padding: 10px 20px; font-size: 16px;">Reset Game</button>
+        <p id="score-display" style="font-size: 20px;">Score: 0</p>
+        <canvas id="snake-game" width="1000" height="400"></canvas>
+
+        <div style="margin-top: 10px;">
+            <button id="reset-button">Reset Game</button>
+            <button id="skin-button">Mudar Skin</button>
         </div>
-        <div style="margin-top: 20px; text-align: center;">
-            <h3>Ranking</h3>
-            <ol id="ranking-list" style="text-align: left; display: inline-block;"></ol>
-        </div>
+
+        <style>
+            #snake-game {
+                border: 2px solid #0000CD;
+                background-color: #f0f0f0;
+                display: block;
+                margin: 0 auto;
+            }
+
+            #reset-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #0000CD;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            #reset-button,
+            #skin-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #0000CD;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 5px;
+            }
+
+            #reset-button:hover {
+                background-color: #00009b;
+            }
+
+            section {
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+
         <script>
             const canvas = document.getElementById("snake-game");
             const ctx = canvas.getContext("2d");
             const resetButton = document.getElementById("reset-button");
-            const rankingList = document.getElementById("ranking-list");
+            const scoreDisplay = document.getElementById("score-display");
+            const skinButton = document.getElementById("skin-button");
 
             const box = 20;
-            let snake, food, direction, score, game;
-            const user = prompt("Digite seu nome de usuário:") || "Anônimo";
-            let rankings = JSON.parse(localStorage.getItem("rankings")) || [];
+            let snake, direction, food, score, gameLoop;
+            let currentSkin = 0;
 
-            function resizeCanvas() {
-                canvas.width = Math.floor(window.innerWidth / box) * box;
-                canvas.height = Math.floor(window.innerHeight / box) * box;
-            }
+            const skins = [
+                { head: "green", body: "lightgreen", border: "darkgreen" },
+                { head: "blue", body: "skyblue", border: "darkblue" },
+                { head: "purple", body: "violet", border: "indigo" },
+                { head: "orange", body: "moccasin", border: "darkorange" },
+                { head: "red", body: "salmon", border: "darkred" },
+                { head: "pink", body: "lightpink", border: "deeppink" },
+                { head: "brown", body: "tan", border: "saddlebrown" },
+                { head: "black", body: "gray", border: "dimgray" },
+                { head: "white", body: "lightgray", border: "darkgray" },
+                { head: "gold", body: "lightgoldenrodyellow", border: "goldenrod" },
+                { head: "coral", body: "lightcoral", border: "orangered" },
+                { head: "indigo", body: "lavender", border: "darkslateblue" },
+                { head: "crimson", body: "lightpink", border: "firebrick" },
+                { head: "chartreuse", body: "lightgreen", border: "limegreen" },
+                { head: "khaki", body: "palegoldenrod", border: "olive" },
+                { head: "salmon", body: "lightcoral", border: "tomato" },
+                { head: "plum", body: "thistle", border: "purple" },
+                { head: "orchid", body: "lavenderblush", border: "darkviolet" },
+                { head: "lightblue", body: "aliceblue", border: "steelblue" },
+                { head: "lightgreen", body: "palegreen", border: "forestgreen" },
+                { head: "lightpink", body: "mistyrose", border: "deeppink" },
+                { head: "lightgray", body: "gainsboro", border: "darkgray" },
+                { head: "darkred", body: "indianred", border: "firebrick" },
+                { head: "darkblue", body: "lightsteelblue", border: "navy" },
+                { head: "darkgreen", body: "mediumseagreen", border: "forestgreen" },
+                { head: "darkorange", body: "peachpuff", border: "orangered" },
+                { head: "darkviolet", body: "plum", border: "indigo" },
+                { head: "darkslategray", body: "lightseagreen", border: "teal" },
+                { head: "darkkhaki", body: "khaki", border: "olive" },
+                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
+                { head: "darkorchid", body: "thistle", border: "purple" },
+                { head: "darkslateblue", body: "lavender", border: "indigo" },
+                { head: "darkcyan", body: "lightcyan", border: "teal" },
+                { head: "darkmagenta", body: "plum", border: "purple" },
+                { head: "darkturquoise", body: "paleturquoise", border: "turquoise" },
+                { head: "darkseagreen", body: "palegreen", border: "mediumseagreen" },
+                { head: "darkorchid", body: "plum", border: "indigo" },
+                { head: "darkslategray", body: "lightseagreen", border: "teal" },
+                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
+                { head: "darkviolet", body: "plum", border: "indigo" },
+                { head: "darkred", body: "indianred", border: "firebrick" },
+                { head: "darkblue", body: "lightsteelblue", border: "navy" },
+                { head: "darkgreen", body: "mediumseagreen", border: "forestgreen" },
+                { head: "darkorange", body: "peachpuff", border: "orangered" },
+                { head: "darkviolet", body: "plum", border: "indigo" },
+                { head: "darkslategray", body: "lightseagreen", border: "teal" },
+                { head: "darkkhaki", body: "khaki", border: "olive" },
+                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
+                { head: "darkorchid", body: "thistle", border: "purple" },
+                { head: "darkslateblue", body: "lavender", border: "indigo" },
+                { head: "darkcyan", body: "lightcyan", border: "teal" },
+                { head: "darkmagenta", body: "plum", border: "purple" },
+                { head: "darkturquoise", body: "paleturquoise", border: "turquoise" },
+                { head: "darkseagreen", body: "palegreen", border: "mediumseagreen" },
+                { head: "crimson", body: "lightpink", border: "firebrick" },
+                { head: "chartreuse", body: "lightgreen", border: "limegreen" },
+                { head: "khaki", body: "palegoldenrod", border: "olive" },
+                { head: "salmon", body: "lightcoral", border: "tomato" },
+                { head: "plum", body: "thistle", border: "purple" },
+                { head: "orchid", body: "lavenderblush", border: "darkviolet" },
+                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
+                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
+                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
+                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
+                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
+                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
+                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
+                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
+                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "purple", body: "lavender", border: "indigo" },
+                { head: "orange", body: "moccasin", border: "darkorange" },
+                { head: "red", body: "salmon", border: "darkred" },
+                { head: "pink", body: "lightpink", border: "deeppink" },
+                { head: "brown", body: "tan", border: "saddlebrown" },
+                { head: "black", body: "gray", border: "dimgray" },
+                { head: "white", body: "lightgray", border: "darkgray" },
+                { head: "gold", body: "lightgoldenrodyellow", border: "goldenrod" },
+                { head: "coral", body: "lightcoral", border: "orangered" },
+                { head: "indigo", body: "lavender", border: "darkslateblue" },
+                { head: "crimson", body: "lightpink", border: "firebrick" },
+                { head: "chartreuse", body: "lightgreen", border: "limegreen" },
+                { head: "khaki", body: "palegoldenrod", border: "olive" },
+                { head: "salmon", body: "lightcoral", border: "tomato" },
+                { head: "plum", body: "thistle", border: "purple" },
+                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
+                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
+                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
+                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
+                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
+                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
+                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
+                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
+                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "purple", body: "lavender", border: "indigo" },
+                { head: "orange", body: "moccasin", border: "darkorange" },
+                { head: "red", body: "salmon", border: "darkred" },
+                { head: "pink", body: "lightpink", border: "deeppink" },
+                { head: "brown", body: "tan", border: "saddlebrown" },
+                { head: "black", body: "gray", border: "dimgray" },
+                { head: "white", body: "lightgray", border: "darkgray" },
+                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
+                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
+                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
+                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
+                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
+                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
+                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
+                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
+                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "purple", body: "lavender", border: "indigo" },
+                { head: "orange", body: "moccasin", border: "darkorange" },
+                { head: "red", body: "salmon", border: "darkred" },
+                { head: "pink", body: "lightpink", border: "deeppink" },
+                { head: "brown", body: "tan", border: "saddlebrown" },
+                { head: "black", body: "gray", border: "dimgray" },
+                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
+                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
+                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
+                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
+                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
+                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
+                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
+                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
+                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
+                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
+                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
+            ];
 
             function initializeGame() {
-                resizeCanvas();
                 snake = [{ x: 9 * box, y: 10 * box }];
-                food = {
-                    x: Math.floor(Math.random() * (canvas.width / box)) * box,
-                    y: Math.floor(Math.random() * (canvas.height / box)) * box,
-                };
-                direction = null;
+                direction = "RIGHT";
                 score = 0;
-                if (game) clearInterval(game);
-                game = setInterval(drawGame, 100);
+                food = generateFood();
+                updateScore();
+
+                if (gameLoop) clearInterval(gameLoop);
+                gameLoop = setInterval(updateGame, 100);
             }
 
-            function updateRanking() {
-                const existingUser = rankings.find((entry) => entry.user === user);
-                if (existingUser) {
-                    if (score > existingUser.score) {
-                        existingUser.score = score;
-                    }
-                } else {
-                    rankings.push({ user, score });
-                }
-                rankings.sort((a, b) => b.score - a.score);
-                localStorage.setItem("rankings", JSON.stringify(rankings));
-                displayRanking();
+            function generateFood() {
+                return {
+                    x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                    y: Math.floor(Math.random() * (canvas.height / box)) * box
+                };
             }
 
-            function displayRanking() {
-                rankingList.innerHTML = "";
-                rankings.forEach((entry, index) => {
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `${index + 1}. ${entry.user}: ${entry.score}`;
-                    rankingList.appendChild(listItem);
-                });
+            function updateScore() {
+                scoreDisplay.innerText = "Score: " + score;
             }
-
-            window.addEventListener("resize", () => {
-                clearInterval(game);
-                initializeGame();
-            });
 
             document.addEventListener("keydown", (event) => {
-                if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-                else if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-                else if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-                else if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+                const key = event.key;
+                if (key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+                else if (key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+                else if (key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+                else if (key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
             });
 
             resetButton.addEventListener("click", initializeGame);
 
+            skinButton.addEventListener("click", () => {
+                currentSkin = (currentSkin + 1) % skins.length;
+                if (snake && snake.length > 0) {
+                    drawGame(); // Redesenha com a nova skin se o jogo já estiver em andamento
+                }
+            });
+
+            function updateGame() {
+                let head = { ...snake[0] };
+                if (direction === "UP") head.y -= box;
+                if (direction === "DOWN") head.y += box;
+                if (direction === "LEFT") head.x -= box;
+                if (direction === "RIGHT") head.x += box;
+
+                // Colisão com bordas
+                if (
+                    head.x < 0 || head.y < 0 ||
+                    head.x >= canvas.width || head.y >= canvas.height
+                ) {
+                    endGame();
+                    return;
+                }
+
+                // Colisão com o corpo
+                for (let i = 0; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        endGame();
+                        return;
+                    }
+                }
+
+                // Comer comida
+                if (head.x === food.x && head.y === food.y) {
+                    snake.unshift(head);
+                    score++;
+                    food = generateFood();
+                    updateScore();
+                } else {
+                    snake.pop();
+                    snake.unshift(head);
+                }
+
+                drawGame();
+            }
+
             function drawGame() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const skin = skins[currentSkin];
 
-                // Draw snake
                 for (let i = 0; i < snake.length; i++) {
-                    ctx.fillStyle = i === 0 ? "green" : "lightgreen";
+                    ctx.fillStyle = i === 0 ? skin.head : skin.body;
                     ctx.fillRect(snake[i].x, snake[i].y, box, box);
-                    ctx.strokeStyle = "darkgreen";
+                    ctx.strokeStyle = skin.border;
                     ctx.strokeRect(snake[i].x, snake[i].y, box, box);
                 }
 
-                // Draw food
                 ctx.fillStyle = "red";
                 ctx.fillRect(food.x, food.y, box, box);
-
-                // Move snake
-                let snakeX = snake[0].x;
-                let snakeY = snake[0].y;
-
-                if (direction === "UP") snakeY -= box;
-                if (direction === "DOWN") snakeY += box;
-                if (direction === "LEFT") snakeX -= box;
-                if (direction === "RIGHT") snakeX += box;
-
-                // Check collision with food
-                if (snakeX === food.x && snakeY === food.y) {
-                    score++;
-                    food = {
-                        x: Math.floor(Math.random() * (canvas.width / box)) * box,
-                        y: Math.floor(Math.random() * (canvas.height / box)) * box,
-                    };
-                } else {
-                    snake.pop();
-                }
-
-                // Add new head
-                const newHead = { x: snakeX, y: snakeY };
-
-                // Check collision with walls or itself
-                if (
-                    snakeX < 0 || // Left margin
-                    snakeY < 0 || // Top margin
-                    snakeX >= canvas.width || // Right margin
-                    snakeY >= canvas.height || // Bottom margin
-                    snake.some((segment) => segment.x === newHead.x && segment.y === newHead.y)
-                ) {
-                    clearInterval(game);
-                    alert("Game Over! Your score: " + score);
-                    updateRanking();
-                }
-
-                snake.unshift(newHead);
-
-                // Display score
-                ctx.fillStyle = "black";
-                ctx.font = "20px Arial";
-                ctx.fillText("Score: " + score, 10, canvas.height - 10);
             }
 
-            initializeGame();
-            displayRanking();
+            function endGame() {
+                clearInterval(gameLoop);
+                alert("Game Over! Your score: " + score);
+            }
+
+            // O jogo só inicia manualmente clicando em "Reset Game"
         </script>
     </section>
+
 </body>
 <footer class="footer">
     <p>&copy; <span id="current-year">2025</span> Rsim. Todos os direitos reservados.</p>
 </footer>
+
 </html>

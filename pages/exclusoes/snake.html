@@ -55,64 +55,58 @@
     </header>
 
     <section>
-        <p id="score-display" style="font-size: 20px;">Score: 0</p>
-        <canvas id="snake-game" width="1000" height="400"></canvas>
-
-        <div style="margin-top: 10px;">
-            <button id="reset-button">Reset Game</button>
-            <button id="skin-button">Mudar Skin</button>
-        </div>
-
         <style>
-            #snake-game {
-                border: 2px solid #0000CD;
-                background-color: #f0f0f0;
-                display: block;
-                margin: 0 auto;
+            canvas {
+              background-color: #f0f0f000;
+              border: 2px solid #0000CD;
+              display: block;
+              margin: 0 auto;
             }
-
-            #reset-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                background-color: #0000CD;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
+            #controls {
+              text-align: center;
+              margin-top: 10px;
             }
-
-            #reset-button,
-            #skin-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                background-color: #0000CD;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin: 5px;
+            button {
+              padding: 10px 20px;
+              font-size: 16px;
+              background-color: #0000CD;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              margin: 5px;
             }
-
-            #reset-button:hover {
-                background-color: #00009b;
+            button:hover {
+              background-color: #00009b;
             }
-
-            section {
-                text-align: center;
-                margin-top: 20px;
+            #score-display {
+              text-align: center;
+              font-size: 20px;
+              margin-top: 10px;
             }
         </style>
+        
+        <div id="score-display">Score: 0</div>
+        <canvas id="snake-game" width="1000" height="400"></canvas>
+        <div id="controls">
+            <button id="reset-button">Reset Game</button>
+        </div>
 
         <script>
             const canvas = document.getElementById("snake-game");
             const ctx = canvas.getContext("2d");
             const resetButton = document.getElementById("reset-button");
             const scoreDisplay = document.getElementById("score-display");
-            const skinButton = document.getElementById("skin-button");
 
             const box = 20;
-            let snake, direction, food, score, gameLoop;
+            let snake = [];
+            let direction = "RIGHT";
+            let food = {};
+            let score = 0;
+            let gameLoop;
             let currentSkin = 0;
+            let pulseScale = 1;
+            let growing = true;
 
             const skins = [
                 { head: "green", body: "lightgreen", border: "darkgreen" },
@@ -123,134 +117,43 @@
                 { head: "pink", body: "lightpink", border: "deeppink" },
                 { head: "brown", body: "tan", border: "saddlebrown" },
                 { head: "black", body: "gray", border: "dimgray" },
-                { head: "white", body: "lightgray", border: "darkgray" },
-                { head: "gold", body: "lightgoldenrodyellow", border: "goldenrod" },
-                { head: "coral", body: "lightcoral", border: "orangered" },
+                { head: "yellow", body: "lightyellow", border: "gold" },
+                { head: "cyan", body: "lightcyan", border: "darkcyan" },
+                { head: "lime", body: "lightgreen", border: "darkgreen" },
+                { head: "navy", body: "lightblue", border: "darkblue" },
+                { head: "teal", body: "lightseagreen", border: "darkslategray" },
+                { head: "maroon", body: "lightcoral", border: "darkred" },
+                { head: "olive", body: "khaki", border: "darkkhaki" },
+                { head: "silver", body: "lightgray", border: "darkgray" },
+                { head: "goldenrod", body: "lightgoldenrodyellow", border: "gold" },
+                { head: "orchid", body: "plum", border: "purple" },
+                { head: "coral", body: "lightcoral", border: "tomato" },
+                { head: "slateblue", body: "lightslateblue", border: "slategray" },
+                { head: "crimson", body: "lightpink", border: "firebrick" },
+                { head: "khaki", body: "palegoldenrod", border: "darkkhaki" },
                 { head: "indigo", body: "lavender", border: "darkslateblue" },
-                { head: "crimson", body: "lightpink", border: "firebrick" },
                 { head: "chartreuse", body: "lightgreen", border: "limegreen" },
-                { head: "khaki", body: "palegoldenrod", border: "olive" },
-                { head: "salmon", body: "lightcoral", border: "tomato" },
+                { head: "sienna", body: "peru", border: "saddlebrown" },
                 { head: "plum", body: "thistle", border: "purple" },
-                { head: "orchid", body: "lavenderblush", border: "darkviolet" },
-                { head: "lightblue", body: "aliceblue", border: "steelblue" },
-                { head: "lightgreen", body: "palegreen", border: "forestgreen" },
-                { head: "lightpink", body: "mistyrose", border: "deeppink" },
-                { head: "lightgray", body: "gainsboro", border: "darkgray" },
-                { head: "darkred", body: "indianred", border: "firebrick" },
-                { head: "darkblue", body: "lightsteelblue", border: "navy" },
-                { head: "darkgreen", body: "mediumseagreen", border: "forestgreen" },
+                { head: "steelblue", body: "lightsteelblue", border: "dodgerblue" },
+                { head: "darkviolet", body: "mediumpurple", border: "blueviolet" },
+                { head: "lightgray", body: "gainsboro", border: "dimgray" },
                 { head: "darkorange", body: "peachpuff", border: "orangered" },
-                { head: "darkviolet", body: "plum", border: "indigo" },
-                { head: "darkslategray", body: "lightseagreen", border: "teal" },
+                { head: "mediumseagreen", body: "lightgreen", border: "seagreen" },
+                { head: "lightsalmon", body: "salmon", border: "coral" },
+                { head: "lightsteelblue", body: "lavender", border: "steelblue" },
+                { head: "mediumslateblue", body: "slateblue", border: "slategray" },
+                { head: "lightcyan", body: "paleturquoise", border: "deepskyblue" },
                 { head: "darkkhaki", body: "khaki", border: "olive" },
-                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
-                { head: "darkorchid", body: "thistle", border: "purple" },
-                { head: "darkslateblue", body: "lavender", border: "indigo" },
-                { head: "darkcyan", body: "lightcyan", border: "teal" },
-                { head: "darkmagenta", body: "plum", border: "purple" },
-                { head: "darkturquoise", body: "paleturquoise", border: "turquoise" },
-                { head: "darkseagreen", body: "palegreen", border: "mediumseagreen" },
-                { head: "darkorchid", body: "plum", border: "indigo" },
+                { head: "lightcoral", body: "salmon", border: "tomato" },
+                { head: "mediumvioletred", body: "palevioletred", border: "crimson" },
                 { head: "darkslategray", body: "lightseagreen", border: "teal" },
-                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
-                { head: "darkviolet", body: "plum", border: "indigo" },
-                { head: "darkred", body: "indianred", border: "firebrick" },
-                { head: "darkblue", body: "lightsteelblue", border: "navy" },
-                { head: "darkgreen", body: "mediumseagreen", border: "forestgreen" },
-                { head: "darkorange", body: "peachpuff", border: "orangered" },
-                { head: "darkviolet", body: "plum", border: "indigo" },
-                { head: "darkslategray", body: "lightseagreen", border: "teal" },
-                { head: "darkkhaki", body: "khaki", border: "olive" },
-                { head: "darkgoldenrod", body: "lightgoldenrodyellow", border: "gold" },
-                { head: "darkorchid", body: "thistle", border: "purple" },
-                { head: "darkslateblue", body: "lavender", border: "indigo" },
-                { head: "darkcyan", body: "lightcyan", border: "teal" },
-                { head: "darkmagenta", body: "plum", border: "purple" },
-                { head: "darkturquoise", body: "paleturquoise", border: "turquoise" },
-                { head: "darkseagreen", body: "palegreen", border: "mediumseagreen" },
-                { head: "crimson", body: "lightpink", border: "firebrick" },
-                { head: "chartreuse", body: "lightgreen", border: "limegreen" },
-                { head: "khaki", body: "palegoldenrod", border: "olive" },
-                { head: "salmon", body: "lightcoral", border: "tomato" },
-                { head: "plum", body: "thistle", border: "purple" },
-                { head: "orchid", body: "lavenderblush", border: "darkviolet" },
-                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
-                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
-                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
-                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
-                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
-                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
-                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
-                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
-                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "purple", body: "lavender", border: "indigo" },
-                { head: "orange", body: "moccasin", border: "darkorange" },
-                { head: "red", body: "salmon", border: "darkred" },
-                { head: "pink", body: "lightpink", border: "deeppink" },
-                { head: "brown", body: "tan", border: "saddlebrown" },
-                { head: "black", body: "gray", border: "dimgray" },
-                { head: "white", body: "lightgray", border: "darkgray" },
-                { head: "gold", body: "lightgoldenrodyellow", border: "goldenrod" },
-                { head: "coral", body: "lightcoral", border: "orangered" },
-                { head: "indigo", body: "lavender", border: "darkslateblue" },
-                { head: "crimson", body: "lightpink", border: "firebrick" },
-                { head: "chartreuse", body: "lightgreen", border: "limegreen" },
-                { head: "khaki", body: "palegoldenrod", border: "olive" },
-                { head: "salmon", body: "lightcoral", border: "tomato" },
-                { head: "plum", body: "thistle", border: "purple" },
-                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
-                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
-                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
-                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
-                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
-                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
-                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
-                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
-                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "purple", body: "lavender", border: "indigo" },
-                { head: "orange", body: "moccasin", border: "darkorange" },
-                { head: "red", body: "salmon", border: "darkred" },
-                { head: "pink", body: "lightpink", border: "deeppink" },
-                { head: "brown", body: "tan", border: "saddlebrown" },
-                { head: "black", body: "gray", border: "dimgray" },
-                { head: "white", body: "lightgray", border: "darkgray" },
-                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
-                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
-                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
-                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
-                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
-                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
-                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
-                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
-                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "purple", body: "lavender", border: "indigo" },
-                { head: "orange", body: "moccasin", border: "darkorange" },
-                { head: "red", body: "salmon", border: "darkred" },
-                { head: "pink", body: "lightpink", border: "deeppink" },
-                { head: "brown", body: "tan", border: "saddlebrown" },
-                { head: "black", body: "gray", border: "dimgray" },
-                { head: "#FF6347", body:"#FF7F50 ", border:"#CD5C5C"},
-                { head: "#4682B4", body:"#87CEFA ", border:"#4169E1"},
-                { head: "#32CD32", body:"#98FB98 ", border:"#228B22"},
-                { head: "#FFD700", body:"#FFFACD ", border:"#FFA500"},
-                { head: "#FF69B4", body:"#FFB6C1 ", border:"#C71585"},
-                { head: "#8A2BE2", body:"#E6E6FA ", border:"#9400D3"},
-                { head: "#FF4500", body:"#FF6347 ", border:"#CD5C5C"},
-                { head: "#00CED1", body:"#AFEEEE ", border:"#20B2AA"},
-                { head: "#ADFF2F", body:"#7FFF00 ", border:"#7CFC00"},
-                { head: "#FF1493", body:"#FF69B4 ", border:"#C71585"},
-                { head: "#00BFFF", body:"#87CEEB ", border:"#1E90FF"},
+                { head: "lightslategray", body: "lightsteelblue", border: "slategray" },
+                { head: "darkorchid", body: "mediumpurple", border: "purple" },
+                { head: "lightpink", body: "hotpink", border: "deeppink" }
             ];
+
+            const emojis = ["🍎", "🍌", "🍇", "🍓", "🍒", "🐞", "🐝", "🪲"];
 
             function initializeGame() {
                 snake = [{ x: 9 * box, y: 10 * box }];
@@ -258,15 +161,17 @@
                 score = 0;
                 food = generateFood();
                 updateScore();
-
+                currentSkin = Math.floor(Math.random() * skins.length);
                 if (gameLoop) clearInterval(gameLoop);
                 gameLoop = setInterval(updateGame, 100);
+                animateFood();
             }
 
             function generateFood() {
                 return {
                     x: Math.floor(Math.random() * (canvas.width / box)) * box,
-                    y: Math.floor(Math.random() * (canvas.height / box)) * box
+                    y: Math.floor(Math.random() * (canvas.height / box)) * box,
+                    emoji: emojis[Math.floor(Math.random() * emojis.length)]
                 };
             }
 
@@ -284,13 +189,6 @@
 
             resetButton.addEventListener("click", initializeGame);
 
-            skinButton.addEventListener("click", () => {
-                currentSkin = (currentSkin + 1) % skins.length;
-                if (snake && snake.length > 0) {
-                    drawGame(); // Redesenha com a nova skin se o jogo já estiver em andamento
-                }
-            });
-
             function updateGame() {
                 let head = { ...snake[0] };
                 if (direction === "UP") head.y -= box;
@@ -298,29 +196,23 @@
                 if (direction === "LEFT") head.x -= box;
                 if (direction === "RIGHT") head.x += box;
 
-                // Colisão com bordas
                 if (
-                    head.x < 0 || head.y < 0 ||
-                    head.x >= canvas.width || head.y >= canvas.height
+                    head.x < 0 ||
+                    head.y < 0 ||
+                    head.x >= canvas.width ||
+                    head.y >= canvas.height ||
+                    snake.some((segment) => segment.x === head.x && segment.y === head.y)
                 ) {
                     endGame();
                     return;
                 }
 
-                // Colisão com o corpo
-                for (let i = 0; i < snake.length; i++) {
-                    if (head.x === snake[i].x && head.y === snake[i].y) {
-                        endGame();
-                        return;
-                    }
-                }
-
-                // Comer comida
                 if (head.x === food.x && head.y === food.y) {
                     snake.unshift(head);
                     score++;
-                    food = generateFood();
                     updateScore();
+                    food = generateFood();
+                    changeSkin();
                 } else {
                     snake.pop();
                     snake.unshift(head);
@@ -340,16 +232,31 @@
                     ctx.strokeRect(snake[i].x, snake[i].y, box, box);
                 }
 
-                ctx.fillStyle = "red";
-                ctx.fillRect(food.x, food.y, box, box);
+                ctx.font = `${16 * pulseScale}px Arial`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(food.emoji, food.x + box / 2, food.y + box / 2);
             }
 
-            function endGame() {
-                clearInterval(gameLoop);
-                alert("Game Over! Your score: " + score);
+            function changeSkin() {
+                let newSkin;
+                do {
+                    newSkin = Math.floor(Math.random() * skins.length);
+                } while (newSkin === currentSkin);
+                currentSkin = newSkin;
             }
 
-            // O jogo só inicia manualmente clicando em "Reset Game"
+            function animateFood() {
+                function pulse() {
+                    pulseScale += growing ? 0.05 : -0.05;
+                    if (pulseScale >= 1.5) growing = false;
+                    if (pulseScale <= 1) growing = true;
+                    requestAnimationFrame(pulse);
+                }
+                pulse();
+            }
+
+            // Começa apenas quando o usuário clicar em reset
         </script>
     </section>
 

@@ -305,6 +305,8 @@
                 ctx.font = `${16 * pulseScale}px Arial`;
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
+                ctx.fillStyle = "black";
+                ctx.fillText("Score: " + score, canvas.width / 2, 20);
                 ctx.fillText(food.emoji, food.x + box / 2, food.y + box / 2);
             }
 

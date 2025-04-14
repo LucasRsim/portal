@@ -195,7 +195,7 @@ ul {
     color: #ffffff;
     border: none;
     padding: 10px 20px;
-    margin-top: 20px;
+    margin-top: 0px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
@@ -203,9 +203,8 @@ ul {
 }
 
 #btnLimpar:hover {
-    background-color: #ffffff;
-    color: #0000CD;
-    border: 2px solid #0000CD;
+    background-color: #01019c;
+    color: #ffffff;
 
 }
 

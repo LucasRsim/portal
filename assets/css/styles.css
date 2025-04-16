@@ -7,7 +7,7 @@ html, body {
 
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    background-color: #e1dfe7;
+    background-color: #e1dfe773; /* Cor de fundo com opacidade */
     background-image: url('../img/logo-branco.png'); /* Imagem de fundo */
     background-size: 920px; /* Faz a imagem de fundo cobrir toda a tela */
     background-position: center; /* Centraliza a imagem de fundo */
@@ -158,8 +158,15 @@ nav a:hover {
 }
 
 section {
-    padding: 20px;
-
+    padding: 20px; /* Espaçamento interno */
+    margin: 1 auto; /* Centraliza o conteúdo */
+    max-width: 600px; /* Largura máxima do conteúdo */
+    margin-bottom: 15px; /* Espaçamento inferior */
+    margin-left: 10px; /* Espaçamento esquerdo */
+    font-size: 16px; /* Tamanho da fonte */
+    line-height: 1.4; /* Espaçamento entre linhas */
+    text-align: justify; /* Justifica o texto */
+    font-weight: 200; /* Peso da fonte normal */
 }
 
 h1, h2, h3 {

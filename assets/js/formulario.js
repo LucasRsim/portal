@@ -86,9 +86,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'Bradesco-Inclusão': [
                 { label: 'Nome Completo do Titular', type: 'text', name: 'nome-titular', required: true },
                 { label: 'CPF do Titular', type: 'text', name: 'cpf-titular', required: true },
-                { label: 'RG/CNH com CPF (frente e verso)', type: 'file', name: 'rg-cnh', required: true },
-                { label: 'Comprovante de Residência', type: 'file', name: 'comprovante-residencia', required: true },
-                { label: 'Ficha de Inclusão preenchida', type: 'file', name: 'ficha-inclusao', required: false }
+                { label: 'Altura (cm)', type: 'number', name: 'altura', required: true, placeholder: 'Ex: 175' },
+                { label: 'Peso (kg)', type: 'text', name: 'peso', required: true, placeholder: 'Ex: 70,50' },
+                { label: 'Telefone', type: 'tel', name: 'telefone', required: true, placeholder: '(11) 98765-4321' },
+                { label: 'E-mail', type: 'email', name: 'email', required: true, placeholder: 'seuemail@dominio.com' },
+                { label: 'Plano', type: 'text', name: 'plano', required: true },
+                { label: 'Data de Início', type: 'date', name: 'data-inicio', required: true },
+                { label: 'Comprovante de Residência', type: 'file', name: 'comprovante-residencia', required: true, accept: '.pdf' },
+                { label: 'CTPS Digital Completa', type: 'file', name: 'ctps-digital', required: true, accept: '.pdf' },
+                { label: 'Carta da Empresa (Autorização)', type: 'file', name: 'carta-empresa', required: true, accept: '.pdf' }
             ],
             'Bradesco-Exclusão': [
                 { label: 'Nome do Titular a ser excluído', type: 'text', name: 'nome-excluir', required: true },

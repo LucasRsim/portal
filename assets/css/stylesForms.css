@@ -134,7 +134,12 @@ main {
     display: inline-block;
 }
 
+/* ALTERAÇÃO AQUI: Incluindo os novos tipos de input para manter o estilo */
 input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
 select,
 textarea {
     display: block;
@@ -150,7 +155,12 @@ textarea {
     box-sizing: border-box;
 }
 
+/* ALTERAÇÃO AQUI: Incluindo os novos tipos de input para manter o estilo de foco */
 input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
 select:focus,
 textarea:focus {
     outline: none;
@@ -285,7 +295,6 @@ button[type="submit"]:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* CORREÇÃO: Classe utilitária para esconder elementos */
 .hidden {
     display: none !important;
 }
@@ -296,4 +305,3 @@ button[type="submit"]:hover {
 .mt-4 {
     margin-top: 1rem;
 }
-

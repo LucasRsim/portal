@@ -1,16 +1,60 @@
-/* ==========================================================================
-   Estilos Base do Portal RSim
-   ========================================================================== */
+html, body {
+    min-height: 100%; /* Garante que o body ocupe toda a altura da janela */
+    display: flex;
+    flex-direction: column; /* Permite organizar o conteúdo em coluna */
+    margin: 0;
+}
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #e1dfe773; /* Cor de fundo com opacidade */
+    background-image: url('../img/logo-branco.png'); /* Imagem de fundo */
+    background-size: 920px; /* Faz a imagem de fundo cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Não repete a imagem de fundo */
+    background-attachment: fixed; /* Mantém a imagem fixa ao rolar a página */
+    color: #000000;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
+}
+
+.conteudo-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
+
+.texto {
+    flex: 1;
+    color: black;
+}
+  
+.portais-container {
+    background: rgba(5, 5, 143, 0);
+    color: rgb(0, 0, 0);
+    border-radius: 20px;
+    border: 2px solid #000000;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0)
+    
+}
+
+.portais-container2 {
+    background: rgba(5, 5, 143, 0);
+    color: rgb(0, 0, 0);
+    border-radius: 20px;
+    border: 2px solid #00000000;
+    padding: 50px;
+    width: 600px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0)
+    
 }
 
 header {
@@ -20,26 +64,25 @@ header {
     text-align: center;
     margin-bottom: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 5px;
     display: flex;
     justify-content: center;
     gap: 20px;
+    border-radius: 5px;
+    position: relative; /* Garante que o dropdown seja posicionado corretamente */
+    z-index: 10; /* Coloca o menu acima de outros elementos */
 }
 
 nav ul li {
-    display: inline-block;
+    display: block;
     position: relative;
+    padding: 10px 20px;
+    
 }
 
 nav a {
@@ -48,7 +91,6 @@ nav a {
     font-weight: bold;
     padding: 10px 20px;
     border-radius: 5px;
-    display: block;
 }
 
 nav a:hover {
@@ -63,268 +105,165 @@ nav a:hover {
     left: 0;
     background-color: #0000CD;
     list-style: none;
-    padding: 0;
+    padding: 0px;
     width: 200px;
     border-radius: 5px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* CORREÇÃO: Aumentado para garantir a sobreposição */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 20; /* Garante que o submenu sobreponha o rodapé */
+    max-height: 300px; /* Limita a altura do menu */
+    overflow-y: auto; /* Adiciona barra de rolagem se necessário */
+}
+
+/* Estilo para a barra de rolagem */
+.submenu::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.submenu::-webkit-scrollbar-thumb {
+    background-color: #ffffff; /* Cor da barra */
+    border-radius: 4px;
+}
+
+.submenu::-webkit-scrollbar-thumb:hover {
+    background-color: #ffcc00; /* Cor ao passar o mouse */
 }
 
 .dropdown:hover .submenu {
     display: block;
+
 }
 
 .submenu li {
-    padding: 0;
-    border-bottom: 1px solid #4d4dff;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ffffff;
+
+}
+
+.submenu li a {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: block;
+
+}
+
+.submenu li a:hover {
+    background-color: #ffffff;
+    color: #000000;
+
 }
 
 .submenu li:last-child {
     border-bottom: none;
+
 }
 
 section {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+    padding: 20px; /* Espaçamento interno */
+    margin: 1 auto; /* Centraliza o conteúdo */
+    max-width: 600px; /* Largura máxima do conteúdo */
+    margin-bottom: 15px; /* Espaçamento inferior */
+    margin-left: 10px; /* Espaçamento esquerdo */
+    font-size: 16px; /* Tamanho da fonte */
+    line-height: 1.4; /* Espaçamento entre linhas */
+    text-align: justify; /* Justifica o texto */
+    font-weight: 200; /* Peso da fonte normal */
 }
 
 h1, h2, h3 {
     color: #0000CD;
+
+}
+
+.sub-section {
+    background-color: #f0f8ff;
+    border-left: 5px solid #0000CD;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+
+}
+
+ul {
+    padding-left: 20px;
+
+}
+
+.checklist {
+    background-color: #f0f8ff;
+    border-left: 5px solid #0000CD;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    
+}
+
+#btnLimpar {
+    background-color: #0000CD;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 0px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+#btnLimpar:hover {
+    background-color: #01019c;
+    color: #ffffff;
+
 }
 
 .logo {
-    height: 40px;
-    margin-right: 25px;
+    height: 40px; /* Ajuste conforme necessário */
+    margin-right: 25px; /* Espaço entre a logo e os itens do menu */
+    padding: 0 15px; /* Espaço interno da logo */
+
 }
 
-/* ==========================================================================
-   Estilos para o Formulário de Solicitação
-   ========================================================================== */
-
-main {
-    padding: 2rem;
-    max-width: 800px;
-    margin: 2rem auto;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    background-image: url('https://lucasrsim.github.io/portal/assets/img/logo-bg.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 60%;
+nav {
+    display: flex;
+    align-items: center;
 }
 
-.form-section {
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.form-section:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.form-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #0000CD;
-    display: inline-block;
-}
-
-input[type="text"],
-select,
-textarea {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.25rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background-color: #fff;
-    font-size: 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-}
-
-input[type="text"]:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #0000CD;
-    box-shadow: 0 0 0 3px rgba(0, 0, 205, 0.2);
-}
-
-textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.radio-container {
-    display: block;
-    position: relative;
-    padding: 1rem;
-    padding-left: 3rem;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    font-size: 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    transition: all 0.2s ease-in-out;
-}
-
-.radio-container input {
+.comunicado-imagem-fixa {
     position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.radio-checkmark {
-    position: absolute;
-    top: 50%;
-    left: 1rem;
+    top: 130%;
+    right: 40px; /* distância da borda direita da tela */
     transform: translateY(-50%);
-    height: 22px;
-    width: 22px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    transition: all 0.2s ease-in-out;
+    background: rgba(5, 5, 143, 0);
+    border-radius: 20px;
+    border: 2px solid #00000000;
+    padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0);
+    z-index: 0; /* garante que fique por cima de outros elementos */
+    max-width: 400px;
 }
 
-.radio-container:hover {
-    border-color: #0000CD;
-}
-
-.radio-container input:checked ~ .radio-checkmark {
-    background-color: #fff;
-    border-color: #0000CD;
-}
-
-.radio-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-    top: 50%;
-    left: 50%;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #0000CD;
-    transform: translate(-50%, -50%);
-}
-
-.radio-container input:checked ~ .radio-checkmark:after {
-    display: block;
-}
-
-.select-wrapper {
-    position: relative;
-}
-
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    padding-right: 2.5rem;
-}
-
-.select-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    width: 12px;
-    height: 12px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%230000CD'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-input[type="file"] {
-    display: block;
+.imagem-bradesco {
     width: 100%;
-    font-size: 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 0.5rem;
+    height: auto;
+    border-radius: 10px;
 }
 
-.document-item {
-    margin-bottom: 1rem;
-}
-
-.document-item label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-weight: bold;
-}
-
-button[type="submit"] {
-    background-color: #0000CD;
-    color: #ffffff;
-    border: 2px solid transparent;
-    padding: 12px 20px;
-    margin-top: 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 16px;
-    width: 100%;
+footer.footer {
+    margin-top: auto; /* Empurra o rodapé para o final da página */
+    background-color: #00008B; /* Azul escuro */
+    color: white;
     text-align: center;
-    transition: all 0.2s ease-in-out;
+    padding: 10px 0;
+    font-size: 14px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
-button[type="submit"]:hover {
-    background-color: #00008b;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+footer.footer a {
+    color: #ffffff;
+    text-decoration: underline;
+    margin: 0 5px;
 }
 
-/* CORREÇÃO: Classe utilitária para esconder elementos */
-.hidden {
-    display: none !important;
+footer.footer a:hover {
+    color: #ffcc00; /* Amarelo para destaque */
 }
 
-.mt-2 {
-    margin-top: 0.5rem;
-}
-.mt-4 {
-    margin-top: 1rem;
-}
-
-.mt-6 {
-    margin-top: 1.5rem;
-}
-
-.mt-8 {
-    margin-top: 2rem;
-}
-
-.mt-10 {
-    margin-top: 2.5rem;
-}
-
-.mt-12 {
-    margin-top: 3rem;
-}
-
-.mt-16 {
-    margin-top: 4rem;
-}
-
-.mt-20 {
-    margin-top: 5rem;
-}
-
-.mt-24 {
-    margin-top: 6rem;
-}
-
-.mt-28 {
-    margin-top: 6.5rem;
-}

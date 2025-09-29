@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Estilos Base do Portal RSim
+   ========================================================================== */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+header {
+    background-color: #0000CD;
+    color: #ffffff;
+    padding: 15px 0;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline-block;
+    position: relative;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: block;
+}
+
+nav a:hover {
+    background-color: #ffffff;
+    color: #0000CD;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #0000CD;
+    list-style: none;
+    padding: 0;
+    width: 200px;
+    border-radius: 5px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* CORREÇÃO: Aumentado para garantir a sobreposição */
+}
+
+.dropdown:hover .submenu {
+    display: block;
+}
+
+.submenu li {
+    padding: 0;
+    border-bottom: 1px solid #4d4dff;
+}
+
+.submenu li:last-child {
+    border-bottom: none;
+}
+
+section {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1, h2, h3 {
+    color: #0000CD;
+}
+
+.logo {
+    height: 40px;
+    margin-right: 25px;
+}
+
+/* ==========================================================================
+   Estilos para o Formulário de Solicitação
+   ========================================================================== */
+
+main {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-image: url('https://lucasrsim.github.io/portal/assets/img/logo-bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+}
+
+.form-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #0000CD;
+    display: inline-block;
+}
+
+input[type="text"],
+select,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.25rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0000CD;
+    box-shadow: 0 0 0 3px rgba(0, 0, 205, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.radio-container {
+    display: block;
+    position: relative;
+    padding: 1rem;
+    padding-left: 3rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-checkmark {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    height: 22px;
+    width: 22px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+}
+
+.radio-container:hover {
+    border-color: #0000CD;
+}
+
+.radio-container input:checked ~ .radio-checkmark {
+    background-color: #fff;
+    border-color: #0000CD;
+}
+
+.radio-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #0000CD;
+    transform: translate(-50%, -50%);
+}
+
+.radio-container input:checked ~ .radio-checkmark:after {
+    display: block;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.5rem;
+}
+
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%230000CD'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.document-item {
+    margin-bottom: 1rem;
+}
+
+.document-item label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #0000CD;
+    color: #ffffff;
+    border: 2px solid transparent;
+    padding: 12px 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: #00008b;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* CORREÇÃO: Classe utilitária para esconder elementos */
+.hidden {
+    display: none !important;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+.mt-4 {
+    margin-top: 1rem;
+}
+

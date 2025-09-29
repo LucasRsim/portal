@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Manuais e Guias</title>
+    <link rel="shortcut icon" href="../../assets/img/favi.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="header text-white shadow-md">
+        <nav>
+            <img src="../../assets/img/logo branco.png" alt="Logo Rsim branco" class="logo">
+            <ul>
+                <li><a href="../index.html">Início</a></li>
+                <li class="dropdown">
+                    <a href="../inclusoes/inclusoes.html">Inclusões</a>
+                    <ul class="submenu">
+                        <li><a href="bradesco.html">Bradesco</a></li>
+                        <li><a href="biosaude.html">Bio Saúde</a></li>
+                        <li><a href="biovida.html">Bio Vida</a></li>
+                        <li><a href="newleader.html">New Leader</a></li>
+                        <li><a href="notrelife.html">Notre-Life</a></li>
+                        <li><a href="leader.html">Leader</a></li>
+                        <li><a href="privian.html">Privian</a></li>
+                        <li><a href="sulamerica.html">Sulamerica</a></li>
+                        <li><a href="portoseguro.html">Porto Seguro</a></li>
+                        <li><a href="unimed.html">Unimed</a></li>
+                        <li><a href="amil.html">Amil</a></li>
+                        <li><a href="gndi.html">GNDI</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="../exclusoes/exclusoes.html">Exclusões</a>
+                    <ul class="submenu">
+                        <li><a href="../exclusoes/">Bradesco</a></li>
+                        <li><a href="../exclusoes/">Bio Saúde</a></li>
+                        <li><a href="../exclusoes/">Bio Vida</a></li>
+                        <li><a href="../exclusoes/">New Leader</a></li>
+                        <li><a href="../exclusoes/">Notre-Life</a></li>
+                        <li><a href="../exclusoes/">Leader</a></li>
+                        <li><a href="../exclusoes/">Privian</a></li>
+                        <li><a href="../exclusoes/">Sulamerica</a></li>
+                        <li><a href="../exclusoes/">Porto Seguro</a></li>
+                        <li><a href="../exclusoes/">Unimed</a></li>
+                        <li><a href="../exclusoes/">Amil</a></li>
+                        <li><a href="../exclusoes/">GNDI</a></li>
+                    </ul>
+                </li>
+                <li><a href="forms.html">Solicitar Movimentação</a></li>
+            </ul>
+        </nav>
+    </header>
+
+         <main>
+        <form id="solicitacao-form" class="form-content">
+            <h1>Abertura de Nova Solicitação</h1>
+            <p class="text-gray-600 mb-8">Siga os passos para gerar seu protocolo de atendimento.</p>
+            
+            <!-- Seção 1: Identificação -->
+            <section class="form-section" id="secao-identificacao">
+                <h2>1. Identificação</h2>
+                <p>Quem está abrindo esta solicitação?</p>
+                
+                <label class="radio-container">Sou da Empresa (Cliente)
+                    <input type="radio" name="tipo-solicitante" value="empresa" checked>
+                    <span class="radio-checkmark"></span>
+                </label>
+                
+                <label class="radio-container">Sou Corretor(a)
+                    <input type="radio" name="tipo-solicitante" value="corretor">
+                    <span class="radio-checkmark"></span>
+                </label>
+
+                <div id="campos-empresa" class="mt-4">
+                    <label for="nome-empresa">Nome da Empresa Cliente</label>
+                    <input type="text" id="nome-empresa" name="nome-empresa" required>
+                    <label for="cnpj-empresa" class="mt-2">CNPJ da Empresa</label>
+                    <input type="text" id="cnpj-empresa" name="cnpj-empresa" required>
+                    <label for="nome-solicitante" class="mt-2">Seu Nome (Solicitante)</label>
+                    <input type="text" id="nome-solicitante" name="nome-solicitante" required>
+                </div>
+
+                <div id="campos-corretor" class="hidden mt-4">
+                    <label for="nome-corretor">Nome do Corretor</label>
+                    <input type="text" id="nome-corretor" name="nome-corretor">
+                    <label for="empresa-corretor" class="mt-2">Empresa do Corretor</label>
+                    <input type="text" id="empresa-corretor" name="empresa-corretor">
+                </div>
+            </section>
+            
+            <!-- Seção 2: Operadora -->
+            <section class="form-section" id="secao-operadora">
+                <h2>2. Operadora</h2>
+                <label for="operadora">Selecione a operadora para o atendimento:</label>
+                <div class="select-wrapper">
+                    <select id="operadora" name="operadora" required>
+                        <option value="">-- Selecione --</option>
+                        <option value="Amil">Amil</option>
+                        <option value="Bradesco">Bradesco</option>
+                        <option value="Sulamérica">Sulamérica</option>
+                        <option value="Porto Seguro">Porto Seguro</option>
+                        <option value="GNDI">GNDI</option>
+                        <option value="Unimed">Unimed</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <!-- NOVO: Campo de texto para "Outros", que começa escondido -->
+                <div id="outros-operadora-container" class="hidden mt-4">
+                    <label for="outros-operadora">Qual operadora?</label>
+                    <input type="text" id="outros-operadora" name="outros-operadora">
+                </div>
+            </section>
+            
+            <!-- Seção 3: Tipo de Solicitação -->
+            <section class="form-section" id="secao-tipo-solicitacao">
+                <h2>3. Tipo de Solicitação</h2>
+                <label for="tipo-solicitacao">Qual movimentação você deseja realizar?</label>
+                <div class="select-wrapper">
+                    <select id="tipo-solicitacao" name="tipo-solicitacao" required>
+                        <option value="">-- Selecione --</option>
+                        <option value="Inclusão">Inclusão</option>
+                        <option value="Exclusão">Exclusão</option>
+                        <option value="Alteração Cadastral">Alteração Cadastral</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                 <!-- NOVO: Área de texto para "Outros", que começa escondida -->
+                <div id="outros-solicitacao-container" class="hidden mt-4">
+                    <label for="outros-solicitacao">Descreva a solicitação:</label>
+                    <textarea id="outros-solicitacao" name="outros-solicitacao" rows="3"></textarea>
+                </div>
+            </section>
+            
+            <!-- Seção 4: Documentos -->
+            <section class="form-section" id="secao-documentos">
+                <h2>4. Dados e Documentos</h2>
+                <div id="documentos-container">
+                    <p class="text-gray-600">Selecione a operadora e o tipo de solicitação para ver os documentos necessários.</p>
+                </div>
+            </section>
+            
+            <button type="submit">Enviar e Gerar Protocolo</button>
+        </form>
+    </main>
+
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

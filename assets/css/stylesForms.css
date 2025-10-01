@@ -1,16 +1,28 @@
 /* ==========================================================================
    Estilos Base do Portal RSim
    ========================================================================== */
+html, body {
+    min-height: 100%; /* Garante que o body ocupe toda a altura da janela */
+    display: flex;
+    flex-direction: column; /* Permite organizar o conteúdo em coluna */
+    margin: 0;
+}
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #e1dfe773; /* Cor de fundo com opacidade */
+    background-image: url('../img/logo-branco.png'); /* Imagem de fundo */
+    background-size: 920px; /* Faz a imagem de fundo cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Não repete a imagem de fundo */
+    background-attachment: fixed; /* Mantém a imagem fixa ao rolar a página */
+    color: #000000;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    flex: 1; /* Faz o conteúdo principal ocupar o espaço disponível */
 }
 
 header {
@@ -20,26 +32,62 @@ header {
     text-align: center;
     margin-bottom: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
 }
 
-nav {
+.conteudo-flex {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+}
+
+.texto {
+    flex: 1;
+    color: black;
+}
+  
+.portais-container {
+    background: rgba(5, 5, 143, 0);
+    color: rgb(0, 0, 0);
+    border-radius: 20px;
+    border: 2px solid #000000;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0)
+    
+}
+
+.portais-container2 {
+    background: rgba(5, 5, 143, 0);
+    color: rgb(0, 0, 0);
+    border-radius: 20px;
+    border: 2px solid #00000000;
+    padding: 50px;
+    width: 600px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0)
+    
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding: 5px;
     display: flex;
     justify-content: center;
     gap: 20px;
+    border-radius: 5px;
+    position: relative; /* Garante que o dropdown seja posicionado corretamente */
+    z-index: 10; /* Coloca o menu acima de outros elementos */
 }
 
 nav ul li {
-    display: inline-block;
+    display: block;
     position: relative;
+    padding: 10px 20px;
+    
 }
 
 nav a {
@@ -48,7 +96,6 @@ nav a {
     font-weight: bold;
     padding: 10px 20px;
     border-radius: 5px;
-    display: block;
 }
 
 nav a:hover {
@@ -63,24 +110,64 @@ nav a:hover {
     left: 0;
     background-color: #0000CD;
     list-style: none;
-    padding: 0;
+    padding: 0px;
     width: 200px;
     border-radius: 5px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* CORREÇÃO: Aumentado para garantir a sobreposição */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 20; /* Garante que o submenu sobreponha o rodapé */
+    max-height: 300px; /* Limita a altura do menu */
+    overflow-y: auto; /* Adiciona barra de rolagem se necessário */
+}
+
+/* Estilo para a barra de rolagem */
+.submenu::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+}
+
+.submenu::-webkit-scrollbar-thumb {
+    background-color: #ffffff; /* Cor da barra */
+    border-radius: 4px;
+}
+
+.submenu::-webkit-scrollbar-thumb:hover {
+    background-color: #ffcc00; /* Cor ao passar o mouse */
 }
 
 .dropdown:hover .submenu {
     display: block;
+
 }
 
 .submenu li {
-    padding: 0;
-    border-bottom: 1px solid #4d4dff;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ffffff;
+
+}
+
+.submenu li a {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: block;
+
+}
+
+.submenu li a:hover {
+    background-color: #ffffff;
+    color: #000000;
+
 }
 
 .submenu li:last-child {
     border-bottom: none;
+
+}
+
+.logo {
+    height: 40px; /* Ajuste conforme necessário */
+    margin-right: 25px; /* Espaço entre a logo e os itens do menu */
+    padding: 0 15px; /* Espaço interno da logo */
+    align-items: left;
+
 }
 
 section {

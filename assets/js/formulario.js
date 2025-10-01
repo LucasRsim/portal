@@ -22,8 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 const data = await response.json();
                 alert('Login realizado com sucesso!');
-                // Redirecionar para a página principal
-                window.location.href = './pages/home.html'; // Caminho ajustado
+                window.location.href = './pages/home.html';
             } else {
                 const error = await response.json();
                 alert(`Erro: ${error.message}`);
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (response.ok) {
                 alert('Cadastro realizado com sucesso!');
-                window.location.href = '../../index.html'; // Caminho ajustado
+                window.location.href = '../../index.html';
             } else {
                 const error = await response.json();
                 alert(`Erro: ${error.message}`);
@@ -64,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- LÓGICA PARA O FORMULÁRIO DE NOVA SOLICITAÇÃO ---
     const solicitacaoForm = document.getElementById('solicitacao-form');
 
-    // Só executa o código do formulário se ele existir na página atual
     if (solicitacaoForm) {
+        // Seletores de elementos do formulário
         const tipoSolicitanteRadios = document.querySelectorAll('input[name="tipo-solicitante"]');
         const camposEmpresa = document.getElementById('campos-empresa');
         const camposCorretor = document.getElementById('campos-corretor');
@@ -82,33 +81,114 @@ document.addEventListener('DOMContentLoaded', function() {
         const outrosSolicitacaoTextarea = document.getElementById('outros-solicitacao');
         const documentosContainer = document.getElementById('documentos-container');
         
+        // Base de dados simulada com os campos necessários para cada solicitação
         const documentosNecessarios = {
             'Bradesco-Inclusão': [
                 { label: 'Nome Completo do Titular', type: 'text', name: 'nome-titular', required: true },
-                { label: 'CPF do Titular', type: 'text', name: 'cpf-titular', required: true },
+                { label: 'CPF do Titular', type: 'text', name: 'cpf-titular', required: true, mask: 'cpf' },
                 { label: 'Altura (cm)', type: 'number', name: 'altura', required: true, placeholder: 'Ex: 175' },
-                { label: 'Peso (kg)', type: 'text', name: 'peso', required: true, placeholder: 'Ex: 70,50' },
-                { label: 'Telefone', type: 'tel', name: 'telefone', required: true, placeholder: '(11) 98765-4321' },
+                { label: 'Peso (kg)', type: 'text', name: 'peso', required: true, placeholder: 'Ex: 70,50', mask: 'decimal' },
+                { label: 'Telefone', type: 'tel', name: 'telefone', required: true, placeholder: '(11) 98765-4321', mask: 'phone' },
                 { label: 'E-mail', type: 'email', name: 'email', required: true, placeholder: 'seuemail@dominio.com' },
                 { label: 'Plano', type: 'text', name: 'plano', required: true },
                 { label: 'Data de Início', type: 'date', name: 'data-inicio', required: true },
                 { label: 'Comprovante de Residência', type: 'file', name: 'comprovante-residencia', required: true, accept: '.pdf' },
                 { label: 'CTPS Digital Completa', type: 'file', name: 'ctps-digital', required: true, accept: '.pdf' },
-                { label: 'Carta da Empresa (Autorização)', type: 'file', name: 'carta-empresa', required: true, accept: '.pdf' }
+                { label: 'Carta da Empresa (Autorização)', type: 'file', name: 'carta-empresa', required: true, accept: '.pdf' },
+                { label: 'RG/CNH com CPF frente e verso', type: 'file', name: 'RG-CNH-CPF', required: true, accept: '.pdf' }
             ],
             'Bradesco-Exclusão': [
                 { label: 'Nome do Titular a ser excluído', type: 'text', name: 'nome-excluir', required: true },
-                { label: 'CPF do Titular a ser excluído', type: 'text', name: 'cpf-excluir', required: true },
-                { label: 'Carta de Exclusão assinada', type: 'file', name: 'carta-exclusao', required: true }
+                { label: 'CPF do Titular a ser excluído', type: 'text', name: 'cpf-excluir', required: true, mask: 'cpf' },
+                { label: 'Carta de Exclusão assinada', type: 'file', name: 'carta-exclusao', required: true, accept: '.pdf,.doc,.docx,image/*' }
             ],
-             'Sulamérica-Inclusão': [
+            'Sulamérica-Inclusão': [
                 { label: 'Nome Completo do Titular', type: 'text', name: 'nome-titular', required: true },
-                { label: 'CPF do Titular', type: 'text', name: 'cpf-titular', required: true },
-                { label: 'Proposta de Adesão', type: 'file', name: 'proposta', required: true },
-                { label: 'Declaração de Saúde', type: 'file', name: 'declaracao-saude', required: true }
+                { label: 'CPF do Titular', type: 'text', name: 'cpf-titular', required: true, mask: 'cpf' },
+                { label: 'Proposta de Adesão', type: 'file', name: 'proposta', required: true, accept: '.pdf' },
+                { label: 'Declaração de Saúde', type: 'file', name: 'declaracao-saude', required: true, accept: '.pdf' }
             ],
         };
 
+        /**
+         * NOVO: Função para aplicar máscaras de formatação em campos de input.
+         * @param {HTMLInputElement} inputElement - O campo de input.
+         * @param {string} maskType - O tipo de máscara ('cpf', 'phone', 'decimal').
+         */
+        function applyInputMask(inputElement, maskType) {
+            inputElement.addEventListener('input', (e) => {
+                let value = e.target.value;
+                switch (maskType) {
+                    case 'cpf':
+                        e.target.value = value.replace(/\D/g, '')
+                                             .replace(/(\d{3})(\d)/, '$1.$2')
+                                             .replace(/(\d{3})(\d)/, '$1.$2')
+                                             .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+                                             .substring(0, 14);
+                        break;
+                    case 'phone':
+                        e.target.value = value.replace(/\D/g, '')
+                                             .replace(/^(\d{2})(\d)/, '($1) $2')
+                                             .replace(/(\d{5})(\d)/, '$1-$2')
+                                             .substring(0, 15);
+                        break;
+                    case 'decimal':
+                        // Permite apenas números e uma única vírgula.
+                        e.target.value = value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+                        break;
+                }
+            });
+        }
+
+        /**
+         * CORRIGIDO: Esta função agora cria os elementos DOM de forma robusta.
+         */
+        function updateDocumentos() {
+            const operadora = operadoraSelect.value;
+            const solicitacao = tipoSolicitacaoSelect.value;
+            const key = `${operadora}-${solicitacao}`;
+            documentosContainer.innerHTML = ''; // Limpa o container
+
+            if (operadora === 'outros' || solicitacao === 'outros') {
+                // ... (código para "outros" continua o mesmo)
+                return;
+            }
+
+            const documentos = documentosNecessarios[key];
+            if (documentos) {
+                documentos.forEach(doc => {
+                    const docItemDiv = document.createElement('div');
+                    docItemDiv.className = 'document-item';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = doc.name;
+                    label.textContent = doc.label + (doc.required ? ' *' : ' (Opcional)');
+                    
+                    const input = document.createElement('input');
+                    input.type = doc.type;
+                    input.id = doc.name;
+                    input.name = doc.name;
+                    if (doc.required) input.required = true;
+                    if (doc.placeholder) input.placeholder = doc.placeholder;
+                    if (doc.accept) input.accept = doc.accept;
+
+                    // Aplica a máscara se especificada
+                    if (doc.mask) {
+                        applyInputMask(input, doc.mask);
+                    }
+
+                    docItemDiv.appendChild(label);
+                    docItemDiv.appendChild(input);
+                    documentosContainer.appendChild(docItemDiv);
+                });
+            } else if (operadora && solicitacao) {
+                documentosContainer.innerHTML = '<p>Nenhum documento específico é necessário para esta seleção.</p>';
+            } else {
+                documentosContainer.innerHTML = '<p>Selecione a operadora e o tipo de solicitação para ver os documentos necessários.</p>';
+            }
+        }
+
+        // Funções para gerenciar a visibilidade dos campos (sem alterações)
         function atualizarCamposSolicitante() {
             const selecionado = document.querySelector('input[name="tipo-solicitante"]:checked').value;
             if (selecionado === 'empresa') {
@@ -127,44 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 nomeSolicitanteInput.required = false;
                 nomeCorretorInput.required = true;
                 empresaCorretorInput.required = true;
-            }
-        }
-
-        function updateDocumentos() {
-            const operadora = operadoraSelect.value;
-            const solicitacao = tipoSolicitacaoSelect.value;
-            const key = `${operadora}-${solicitacao}`;
-            documentosContainer.innerHTML = '';
-
-            if (operadora === 'outros' || solicitacao === 'outros') {
-                documentosContainer.innerHTML = `
-                    <div class="document-item">
-                        <p>Por favor, descreva sua solicitação nos campos acima e anexe os documentos que julgar necessários.</p>
-                        <label for="arquivos-outros">Anexar Documentos *</label>
-                        <input type="file" id="arquivos-outros" name="arquivos-outros[]" multiple required>
-                    </div>
-                `;
-                return;
-            }
-
-            const documentos = documentosNecessarios[key];
-            if (documentos) {
-                documentos.forEach(doc => {
-                    const requiredAsterisk = doc.required ? ' *' : ' (Opcional)';
-                    const requiredTag = doc.required ? 'required' : '';
-                    let fieldHtml = `<div class="document-item"><label for="${doc.name}">${doc.label}${requiredAsterisk}</label>`;
-                    if (doc.type === 'text') {
-                        fieldHtml += `<input type="text" id="${doc.name}" name="${doc.name}" ${requiredTag}>`;
-                    } else if (doc.type === 'file') {
-                        fieldHtml += `<input type="file" id="${doc.name}" name="${doc.name}" ${requiredTag}>`;
-                    }
-                    fieldHtml += `</div>`;
-                    documentosContainer.innerHTML += fieldHtml;
-                });
-            } else if (operadora && solicitacao) {
-                documentosContainer.innerHTML = '<p>Nenhum documento específico é necessário para esta seleção.</p>';
-            } else {
-                documentosContainer.innerHTML = '<p>Selecione a operadora e o tipo de solicitação para ver os documentos necessários.</p>';
             }
         }
         
@@ -188,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Event Listeners (sem alterações)
         tipoSolicitanteRadios.forEach(radio => radio.addEventListener('change', atualizarCamposSolicitante));
         operadoraSelect.addEventListener('change', () => {
             checkOutrosOperadora();
@@ -200,14 +243,13 @@ document.addEventListener('DOMContentLoaded', function() {
         solicitacaoForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Formulário enviado com sucesso! (verifique o console para os dados)');
-            // Aqui virá o código para enviar os dados para o seu servidor no Render
             const formData = new FormData(solicitacaoForm);
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
         });
 
-        // Inicialização - Executa as funções uma vez para garantir o estado inicial correto
+        // Inicialização do formulário (sem alterações)
         atualizarCamposSolicitante();
         checkOutrosOperadora();
         checkOutrosSolicitacao();

@@ -53,10 +53,10 @@
         </nav>
     </header>
 
-         <main>
-        <form id="solicitacao-form" class="form-content">
+    <main>
+        <form id="solicitacao-form">
             <h1>Abertura de Nova Solicitação</h1>
-            <p class="text-gray-600 mb-8">Siga os passos para gerar seu protocolo de atendimento.</p>
+            <p>Siga os passos para gerar seu protocolo de atendimento.</p>
             
             <!-- Seção 1: Identificação -->
             <section class="form-section" id="secao-identificacao">
@@ -106,7 +106,6 @@
                         <option value="outros">Outros</option>
                     </select>
                 </div>
-                <!-- NOVO: Campo de texto para "Outros", que começa escondido -->
                 <div id="outros-operadora-container" class="hidden mt-4">
                     <label for="outros-operadora">Qual operadora?</label>
                     <input type="text" id="outros-operadora" name="outros-operadora">
@@ -126,22 +125,30 @@
                         <option value="outros">Outros</option>
                     </select>
                 </div>
-                 <!-- NOVO: Área de texto para "Outros", que começa escondida -->
                 <div id="outros-solicitacao-container" class="hidden mt-4">
                     <label for="outros-solicitacao">Descreva a solicitação:</label>
                     <textarea id="outros-solicitacao" name="outros-solicitacao" rows="3"></textarea>
                 </div>
             </section>
             
-            <!-- Seção 4: Documentos -->
+            <!-- Seção 4: Documentos do Titular -->
             <section class="form-section" id="secao-documentos">
-                <h2>4. Dados e Documentos</h2>
+                <h2>4. Dados e Documentos do Titular</h2>
                 <div id="documentos-container">
-                    <p class="text-gray-600">Selecione a operadora e o tipo de solicitação para ver os documentos necessários.</p>
+                    <p>Selecione a operadora e o tipo de solicitação para ver os documentos necessários.</p>
                 </div>
             </section>
+
+            <!-- NOVO: Seção para Dependentes -->
+            <section id="secao-dependentes" class="form-section hidden">
+                 <h2>5. Dependentes</h2>
+                 <div id="dependentes-container">
+                    <!-- Formulários de dependentes serão adicionados aqui -->
+                 </div>
+                 <button type="button" id="btn-add-dependente">Adicionar Dependente</button>
+            </section>
             
-            <button type="submit">Enviar e Gerar Protocolo</button>
+            <button type="submit" id="btn-submit-final">Enviar e Gerar Protocolo</button>
         </form>
     </main>
 

@@ -3,7 +3,6 @@ import { supabase } from './supabase-client.js';
 
 // Função para exibir notificações ao usuário
 function showNotification(message, type = 'info') {
-    // No futuro, podemos trocar o 'alert' por uma caixa de diálogo mais elegante
     alert(message);
     console.log(`[${type.toUpperCase()}]`, message);
 }
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const forgotPasswordForm = document.getElementById('forgot-password-form');
-    const resetPasswordForm = document.getElementById('reset-password-form'); // Novo
+    const resetPasswordForm = document.getElementById('reset-password-form');
 
     // --- Manipulador de Login ---
     if (loginForm) {
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = e.target.email.value;
             const password = e.target.password.value;
 
-            // 1. Tenta fazer o login
             const { data: { user, session }, error } = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password,
@@ -34,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (session) {
-                // 2. Se o login for bem-sucedido, verifica se o usuário está aprovado
                 const { data: profile, error: profileError } = await supabase
                     .from('profiles')
                     .select('is_approved')
@@ -47,9 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (profile.is_approved) {
                     showNotification('Login realizado com sucesso!');
-                    window.location.href = '/pages/home.html'; // Redireciona para a página principal
+                    window.location.href = '/pages/home.html';
                 } else {
-                    // Se não estiver aprovado, desloga o usuário e exibe a mensagem
                     await supabase.auth.signOut();
                     showNotification('Seu cadastro ainda não foi aprovado por um administrador.', 'warning');
                 }
@@ -99,28 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- Manipulador da Página de Redefinição de Senha ---
+    // --- [CORRIGIDO] Manipulador da Página de Redefinição de Senha ---
     if (resetPasswordForm) {
-        // Este evento é acionado quando o usuário chega na página vindo do link de e-mail.
-        // O Supabase detecta o token na URL e prepara a sessão para a troca de senha.
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'PASSWORD_RECOVERY') {
-                resetPasswordForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const newPassword = e.target.password.value;
-        
-                    const { error } = await supabase.auth.updateUser({
-                      password: newPassword
-                    });
-        
-                    if (error) {
-                        return showNotification(`Erro ao redefinir a senha: ${error.message}`, 'error');
-                    }
-                    
-                    showNotification('Senha alterada com sucesso! Você será redirecionado para a tela de login.');
-                    window.location.href = '/index.html'; // Redireciona para o login
-                });
+        // O Supabase já terá processado o token da URL assim que a página carregar.
+        // Nós apenas precisamos adicionar o listener ao formulário imediatamente.
+        resetPasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPassword = e.target.password.value;
+
+            // Esta função só funcionará se houver uma sessão de recuperação de senha ativa
+            const { error } = await supabase.auth.updateUser({
+              password: newPassword
+            });
+
+            if (error) {
+                return showNotification(`Erro ao redefinir a senha: ${error.message}`, 'error');
             }
+            
+            showNotification('Senha alterada com sucesso! Você será redirecionado para a tela de login.');
+            window.location.href = '/index.html'; // Redireciona para o login
         });
     }
 });

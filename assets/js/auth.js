@@ -1,129 +1,128 @@
-// public/assets/js/auth.js
+// Importa o cliente Supabase do nosso arquivo centralizado
+import { supabase } from './supabase-client.js';
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+// Função para exibir notificações ao usuário
+function showNotification(message, type = 'info') {
+    // No futuro, podemos trocar o 'alert' por uma caixa de diálogo mais elegante
+    alert(message);
+    console.log(`[${type.toUpperCase()}]`, message);
+}
 
-// --- CONFIGURAÇÃO ---
-// SUBSTITUA PELAS SUAS CHAVES DO SUPABASE
-// É seguro expor a ANON_KEY no frontend.
-const SUPABASE_URL = 'https://fxqmvqyxayuhcjfkodms.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4cW12cXl4YXl1aGNqZmtvZG1zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1MTUwNTIsImV4cCI6MjA3NTA5MTA1Mn0.mQV7rjk5vTYf8_A3lTrbhfJMIXG38-ZKbsWAfbqb3tg';
+// --- LÓGICA PARA AS PÁGINAS DE AUTENTICAÇÃO ---
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// --- LÓGICA ---
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Formulário de Login
     const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    const resetPasswordForm = document.getElementById('reset-password-form'); // Novo
+
+    // --- Manipulador de Login ---
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = loginForm.querySelector('#email').value;
-            const password = loginForm.querySelector('#password').value;
+            const email = e.target.email.value;
+            const password = e.target.password.value;
 
-            const { data, error } = await supabase.auth.signInWithPassword({
+            // 1. Tenta fazer o login
+            const { data: { user, session }, error } = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
 
             if (error) {
-                alert('Erro no login: ' + error.message);
-            } else {
-                // Precisamos verificar se o usuário está aprovado
+                return showNotification(`Erro no login: ${error.message}`, 'error');
+            }
+
+            if (session) {
+                // 2. Se o login for bem-sucedido, verifica se o usuário está aprovado
                 const { data: profile, error: profileError } = await supabase
                     .from('profiles')
                     .select('is_approved')
-                    .eq('id', data.user.id)
+                    .eq('id', user.id)
                     .single();
 
-                if (profileError || !profile) {
-                     await supabase.auth.signOut(); // Desloga se não encontrar o perfil
-                     alert('Erro ao verificar perfil. Tente novamente.');
-                } else if (!profile.is_approved) {
-                    await supabase.auth.signOut(); // Desloga o usuário não aprovado
-                    alert('Seu cadastro ainda não foi aprovado por um administrador.');
+                if (profileError) {
+                    return showNotification(`Erro ao buscar perfil: ${profileError.message}`, 'error');
+                }
+
+                if (profile.is_approved) {
+                    showNotification('Login realizado com sucesso!');
+                    window.location.href = '/pages/home.html'; // Redireciona para a página principal
                 } else {
-                    alert('Login realizado com sucesso!');
-                    // Redireciona para a página principal do portal
-                    window.location.href = '/portal/pages/home.html'; 
+                    // Se não estiver aprovado, desloga o usuário e exibe a mensagem
+                    await supabase.auth.signOut();
+                    showNotification('Seu cadastro ainda não foi aprovado por um administrador.', 'warning');
                 }
             }
         });
     }
 
-    // Formulário de Registro
-    const registerForm = document.getElementById('register-form');
+    // --- Manipulador de Registro ---
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = registerForm.querySelector('#name').value;
-            const email = registerForm.querySelector('#email').value;
-            const password = registerForm.querySelector('#password').value;
+            const name = e.target.name.value;
+            const email = e.target.email.value;
+            const password = e.target.password.value;
 
-            const { data, error } = await supabase.auth.signUp({
+            const { error } = await supabase.auth.signUp({
                 email: email,
                 password: password,
                 options: {
                     data: {
-                        name: name // Estes dados serão usados pelo trigger no banco
+                        full_name: name
                     }
                 }
             });
 
             if (error) {
-                alert('Erro no registro: ' + error.message);
-            } else {
-                alert('Registro realizado! Verifique seu e-mail para confirmação e aguarde a aprovação de um administrador.');
-                // Redireciona para a página de login
-                window.location.href = '/index.html'; 
+                return showNotification(`Erro no registro: ${error.message}`, 'error');
             }
+            showNotification('Cadastro realizado! Por favor, verifique seu e-mail para confirmar a conta.');
         });
     }
 
-    // Formulário de "Esqueci minha senha"
-    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    // --- Manipulador de "Esqueci a Senha" ---
     if (forgotPasswordForm) {
         forgotPasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = forgotPasswordForm.querySelector('#email').value;
-            
-            // SUBSTITUA PELA URL CORRETA DA SUA PÁGINA DE REDEFINIR SENHA
-            const resetURL = window.location.origin + '/pages/reset-password.html';
+            const email = e.target.email.value;
 
-            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: resetURL,
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/pages/reset-password.html`,
             });
 
             if (error) {
-                alert('Erro: ' + error.message);
-            } else {
-                alert('Se o e-mail estiver cadastrado, um link para redefinir a senha foi enviado.');
+                return showNotification(`Erro: ${error.message}`, 'error');
             }
+            showNotification('Se um usuário com este e-mail existir, um link de redefinição de senha será enviado.');
         });
     }
-
-    // Formulário para redefinir a senha (na página de reset)
-    const resetPasswordForm = document.getElementById('reset-password-form');
+    
+    // --- Manipulador da Página de Redefinição de Senha ---
     if (resetPasswordForm) {
-        // Esta parte do código só executa na página de redefinição de senha
-        // O Supabase adiciona um `access_token` à URL quando o usuário clica no link do e-mail
+        // Este evento é acionado quando o usuário chega na página vindo do link de e-mail.
+        // O Supabase detecta o token na URL e prepara a sessão para a troca de senha.
         supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event === "PASSWORD_RECOVERY") {
+            if (event === 'PASSWORD_RECOVERY') {
                 resetPasswordForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const password = resetPasswordForm.querySelector('#password').value;
+                    const newPassword = e.target.password.value;
         
-                    const { data, error } = await supabase.auth.updateUser({ password: password });
+                    const { error } = await supabase.auth.updateUser({
+                      password: newPassword
+                    });
         
                     if (error) {
-                        alert('Erro ao redefinir a senha: ' + error.message);
-                    } else {
-                        alert('Senha redefinida com sucesso!');
-                        window.location.href = '/index.html';
+                        return showNotification(`Erro ao redefinir a senha: ${error.message}`, 'error');
                     }
+                    
+                    showNotification('Senha alterada com sucesso! Você será redirecionado para a tela de login.');
+                    window.location.href = '/index.html'; // Redireciona para o login
                 });
             }
         });
     }
 });
 
+// --- FIM DA LÓGICA DE AUTENTICAÇÃO ---

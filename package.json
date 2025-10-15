@@ -2,9 +2,10 @@
   "name": "portal",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,14 +20,9 @@
   "homepage": "https://github.com/LucasRsim/portal#readme",
   "description": "",
   "dependencies": {
-    "@sendgrid/mail": "^8.1.5",
-    "axios": "^1.8.4",
-    "bcrypt": "^5.1.1",
-    "bcryptjs": "^3.0.2",
+    "@supabase/supabase-js": "^2.45.0",  
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2"
+    "express": "^5.1.0"
   }
 }

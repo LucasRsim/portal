@@ -15,4 +15,3 @@ if (!supabaseUrl || !supabaseServiceKey) {
 // Cria um cliente "admin" do Supabase.
 // Ele usa a chave de serviço para ter permissões elevadas.
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-

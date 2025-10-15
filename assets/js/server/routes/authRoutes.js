@@ -39,4 +39,3 @@ router.post('/approve-user', async (req, res) => {
 });
 
 export default router;
-

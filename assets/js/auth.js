@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     alert('Login realizado com sucesso!');
                     // Redireciona para a página principal do portal
-                    window.location.href = '/pages/home.html'; 
+                    window.location.href = '/portal/pages/home.html'; 
                 }
             }
         });

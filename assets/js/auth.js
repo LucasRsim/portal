@@ -1,5 +1,5 @@
 // Importa o cliente Supabase do nosso arquivo centralizado
-import { supabase } from './supabase_client.js';
+import { supabase } from '../js/supabase_client.js';
 
 // Função para exibir notificações ao usuário
 function showNotification(message, type = 'info') {

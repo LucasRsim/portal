@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (profile.is_approved) {
                     showNotification('Login realizado com sucesso!');
-                    window.location.href = '/pages/home.html';
+                    window.location.href = 'pages/home.html';
                 } else {
                     await supabase.auth.signOut();
                     showNotification('Seu cadastro ainda não foi aprovado por um administrador.', 'warning');
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = e.target.email.value;
 
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/pages/reset-password.html`,
+                redirectTo: `${window.location.origin}pages/reset-password.html`,
             });
 
             if (error) {

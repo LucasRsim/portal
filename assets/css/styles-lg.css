@@ -68,8 +68,11 @@ form button:hover {
     background-color: #0000A0; /* Azul mais escuro no hover */
 }
 
-.register-link, .login-link {
+.login-links {
     margin-top: 15px;
+}
+
+.register-link, .login-link {
     font-size: 14px;
     color: #0000CD;
 }
@@ -86,7 +89,5 @@ form button:hover {
 
 .logo {
     height: 50px; /* Ajuste conforme necessário */
-    margin-right: 0px; /* Espaço entre a logo e os itens do menu */
-    margin-bottom: 0px; /* Espaço entre a logo e o título */
-
+    margin-bottom: 20px; /* Espaço entre a logo e o título */
 }
